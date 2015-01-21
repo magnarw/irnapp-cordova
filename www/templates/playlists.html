@@ -1,0 +1,165 @@
+<ion-view   title="{{navTitle}}">
+  <ion-nav-buttons class="bar-header bar-dark" side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <ion-content>
+        
+        <!--div class="row app-background" id="navigation">
+           <div class="col col-20">
+              <button class="button button-dark">
+                <
+              </button>
+           </div>
+           <div class="col col-60">
+            <button class="button button-dark">
+                Onsdag 26.10.2014
+              </button> 
+            </div>
+           <div class="col col-20">
+              <button class="button button-dark">
+                >
+              </button> 
+            </div>
+        </div-->  
+
+        <div class="nav-header">
+          <div class="nav-left">
+            <div class="nav-left-icon">
+            </div>
+          </div>
+          <div class="nav-right">
+            <div class="nav-right-icon">
+            </div>
+          </div>
+          <div class="nav-center">
+            Onsdag 10.10.2014
+          </div>
+        </div>
+
+
+        <div class="row app-background header" id="header">
+            <div class="col col-30">Bønn</div>
+          <div class="col col-30">Tid</div>
+          <div class="col col-20"> 
+           Tid igjen
+         </div>
+         <div class="col col-15">Alarm</div>
+
+        </div>  
+
+        <!--div ng-repeat="playlist in playlists" class="row" ng-class="{ 'active-prey': playlist.isNext }">
+          <div class="col col-30"> {{playlist.title}}</div>
+          <div class="col col-30"> {{playlist.time}}</div>
+          <div class="col col-20"> 
+           <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
+         </div>
+         <div class="col col-15">
+            <div class="alarm icon-alarm-inactive">
+            </div>
+         </div>
+      </div-->
+
+      <div ng-repeat="playlist in playlists" class="preyrow">
+        <div ng-class="playlist.isNext ? 'active-prey-sidebar' : 'sidestatus'">
+        
+        </div>
+        <div class="container" ng-class="{ 'active-prey': playlist.isNext }">
+            <div class="prey">
+               {{playlist.title}}
+            </div>
+            <div class="time">
+                {{playlist.time}}
+            </div>
+            <div class="timeagin">
+             <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
+            </div>
+            <div class="alarm">
+              <div class="alarm-box icon-alarm">
+
+              </div> 
+            </div>
+        </div>
+           
+      </div>
+
+
+      <div class="button-group app-background">
+          
+            <div class="button" onclick="window.open('http://www.muslimskesenter.no/', '_blank', 'location=yes'); return false;">
+              <div class="icon icon-calender">&nbsp;</div>
+              <div class="text">Bønnekalender</div>
+            </div>
+          
+            <div class="button">
+              <div class="icon icon-enr">&nbsp;</div>
+              <div class="text">E-nr database</div>
+            </div>
+          
+            <div class="button">
+              <div class="icon icon-pro">&nbsp;</div>
+              <div class="text">Pro og prod</div>
+            </div>
+
+      </div>  
+
+     <div class="button-group app-background" id="header">
+        <div class="inner">
+            <div class="button left">
+              <div class="icon icon-hijiri">&nbsp;</div>
+              <div class="text">Hijiri</div>
+            </div>
+          
+            <div class="button center">
+              <div class="icon icon-mosque">&nbsp;</div>
+              <div class="text">Mokser</div>
+            </div>
+          
+            <div class="button right">
+              <div class="icon icon-shop">&nbsp;</div>
+              <div class="text">Butikk og serv</div>
+            </div>
+         </div>     
+      </div>  
+
+         <div class="button-group app-background" id="header">
+        <div class="inner">
+            <div class="button left">
+              <div class="icon icon-qibla">&nbsp;</div>
+              <div class="text">Qibla</div>
+            </div>
+          
+            <div class="button center">
+              <div class="icon icon-calender">&nbsp;</div>
+              <div class="text">Om rin</div>
+            </div>
+          
+            <div class="button right">
+              <div class="icon icon-calender">&nbsp;</div>
+              <div class="text">Innstillinger</div>
+            </div>
+         </div>     
+      </div>  
+
+
+      <!--div class="button-bar">
+        <a class="button icon icon-left icon-hijiri" onclick="window.open('https://plus.google.com/+NicRaboy', '_blank', 'location=yes'); return false;">First</a>
+        <a class="button">Second</a>
+        <a class="button">Third</a>
+      </div>
+      <div class="button-bar">
+        <a class="button">First</a>
+        <a class="button">Second</a>
+        <a class="button">Third</a>
+      </div>
+      <div class="button-bar">
+        <a class="button">First</a>
+        <a class="button">Second</a>
+        <a class="button">Third</a>
+      </div-->
+      
+       
+
+      
+  </ion-content>
+</ion-view>
