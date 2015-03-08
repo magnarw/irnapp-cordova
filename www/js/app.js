@@ -5,12 +5,13 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'starter.controllers','timer'])
+var app = angular.module('starter', ['ionic', 'starter.controllers','starter.services','starter.directives','timer','angular-datepicker','ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+  console.log(navigator.compass);
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
@@ -18,7 +19,28 @@ angular.module('starter', ['ionic', 'starter.controllers','timer'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+
+window.plugin.notification.local.ontrigger = function(id, state, json) {
+  $timeout(function() {
+    console.log('triggered');
+    $rootScope.$broadcast('onTrigger', id, state, json);
+  }, 100);
+};
+
+
+
+ 
+  
+
   });
+
+
+ 
+
+
+
+
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -49,6 +71,15 @@ angular.module('starter', ['ionic', 'starter.controllers','timer'])
       }
     }
   })
+  .state('app.qibla', {
+    url: "/qibla",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/qibla.html",
+        controller: 'QiblaCtrl'
+      }
+    }
+  })
   .state('app.aboutirn', {
     url: "/aboutirn",
     views: {
@@ -62,6 +93,14 @@ angular.module('starter', ['ionic', 'starter.controllers','timer'])
         'menuContent': {
           templateUrl: "templates/playlists.html",
           controller: 'PlaylistsCtrl'
+        }
+      }
+    }).state('app.calender', {
+      url: "/calender",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/calender.html",
+          controller: 'CalenderCtrl'
         }
       }
     })
@@ -78,3 +117,13 @@ angular.module('starter', ['ionic', 'starter.controllers','timer'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });
+
+
+app.onReminderAdd = function(id, state, json) {
+  $timeout(function() {
+    $rootScope.$broadcast('onReminderAdd', id, state, json);
+  }, 100);
+};
+
+
+

@@ -12,7 +12,7 @@
     <ion-content>
 
       <div class="menu-container">
-          <div class="menu-icon-home"> 
+          <div class="menu-icon-home" ng-click="changeView('/app/playlist')"> 
           
           </div>
           <div class="menu-text">
@@ -23,7 +23,7 @@
           <div class="menu-icon-calender"> 
           
           </div>
-          <div class="menu-text">
+          <div class="menu-text" ng-click="changeView('/app/calender')">
               Månedestabell
           </div>
       </div>
@@ -59,7 +59,7 @@
             Hijri
           </div>
       </div>
-      <div class="menu-container">
+      <div class="menu-container" ng-click="changeView('/app/qibla')">
           <div class="menu-icon-qibla"> 
           
           </div>

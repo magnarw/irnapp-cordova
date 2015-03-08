@@ -1,25 +1,29 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Login</h1>
+    <h1 class="title">Sett alarm for Asr</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+      <button class="button button-clear" ng-click="closeLogin()">Lukk</button>
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
-        </label>
-      </div>
-    </form>
+
+  <div class="card">
+    <div class="item item-text-wrap">
+      Velg antall minutter før bønn
+    </div>
+   
+  </div>
+  <h3> {{preyOffset}} min</h3>
+   
+  <div class="range">
+      <input type="range" name="volume" ng-model="preyOffset" min="0" max="10" value="0">
+  </div>
+
+  <div class="button-bar">
+  <a class="button" ng-click="addAlarm()">Sett alarm</a>
+  <a class="button">Avbryt</a>
+  
+</div>
+
   </ion-content>
 </ion-modal-view>

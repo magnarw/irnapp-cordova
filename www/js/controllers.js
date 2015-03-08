@@ -14,23 +14,182 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('PlaylistsCtrl', function($scope) {
+.controller('QiblaCtrl', function($scope) {
+  
+  $scope.nav = {
+      deg: 1
+  }
+
+
+  var succ = function(heading) {
+    $scope.nav.deg = heading.magneticHeading;
+    console.log("scope heading:" + $scope.nav.deg)
+    $scope.$apply();
+  };
+
+  var err = function(error) {
+   
+  };
+
+  var options = {
+      frequency: 100
+  }; // Update every 3 seconds
+
+  navigator.compass.watchHeading(succ, err, options);
+
+
+
+  
+})
+.controller('CalenderCtrl', function($scope,preyTimesService,$cordovaDatePicker) {
+  
+  $scope.navTitle = '<div class="icon-home"></div>';
+
+  $scope.currentPreyDateDisplayed =  moment(); 
+  var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+
+    // Clone the value before .endOf()
+  var end = moment(start).endOf('month');
+
+$scope.example = {
+       value: new Date(2013, 9, 1)
+     };
+
+  $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+
+  $scope.activeIndex = $scope.currentPreyDateDisplayed.date();
+
+  $scope.setActive = function(index){
+    $scope.activeIndex = index +1; 
+
+
+  }; 
+$scope.showDatePicker = function () {
+  var options = {
+    date: new Date(),
+    mode: 'date',
+    minDate:  moment().subtract(100, 'years').toDate(),
+    allowOldDates: true,
+    allowFutureDates: false,
+    doneButtonLabel: 'Done',
+    doneButtonColor: '#000000',
+    cancelButtonLabel: 'Abort',
+    cancelButtonColor: '#000000'
+  };
+  
+
+  $cordovaDatePicker.show(options).then(function(date){
+     if(date != undefined){
+        $scope.currentPreyDateDisplayed = moment(date);
+         var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+    // Clone the value before .endOf()
+        var end = moment(start).endOf('month');
+        $scope.activeIndex = -1; 
+        $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+     }
+  
+  });
+  };
+
+  $scope.nextDay = function(){
+      $scope.currentPreyDateDisplayed.add(1, 'month');
+       var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+    // Clone the value before .endOf()
+        var end = moment(start).endOf('month');
+        $scope.activeIndex = -1; 
+        $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+  };
+
+  $scope.prevDay = function(){
+     $scope.currentPreyDateDisplayed.add(-1, 'month');
+        var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+    // Clone the value before .endOf()
+        var end = moment(start).endOf('month');
+        $scope.activeIndex = -1; 
+        $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+  };
+
+
+
+   $scope.dateChanged = function(){
+    alert("hei");
+   };
+
+
+  $scope.isCurrentDay = function(index){
+    index = index +1; 
+   
+    if(index === $scope.activeIndex)
+      return true; 
+    else 
+      return false;
+
+  }; 
+
+ 
+
+  
+
+  
+})
+.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage) {
     
   $scope.currentPreyDateDisplayed =  moment(); 
   $scope.currentPreyDateDisplayed.hours(0);
   $scope.currentPreyDateDisplayed.seconds(0);
   $scope.currentPreyDateDisplayed.minutes(0);
+  $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
   var today = moment();
 
-  $scope.playlists = [
-    { title: 'Fajr', time : "06:01", hasAlarm : false, id: 1, isActive : false ,isNext : false},
-    { title: 'Soloppgang',time : "06:01", hasAlarm : false,id: 2, isActive : false,isNext : false},
-    { title: 'Duhr', time : "06:01", hasAlarm : false,id: 3, isActive : false,isNext : false},
-    { title: 'Duhr', time : "06:01", hasAlarm : false,id: 3, isActive : false,isNext : false},
-    { title: 'Maghrib', time : "06:01", hasAlarm : false,id: 4, isActive : true,isNext : false},
-    { title: 'Isha', time : "23:01", hasAlarm : false, id: 5, isActive : false,isNext : false},
-  
-  ];
+
+ $ionicModal.fromTemplateUrl('templates/login.html', function($ionicModal) {
+        $scope.modal = $ionicModal;
+    }, {
+        // Use our scope for the scope of the modal to keep it simple
+        scope: $scope,
+        // The animation we want to use for the modal entrance
+        animation: 'slide-in-up'
+  }); 
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+
+  var now = new Date().getTime();
+  var _60_seconds_from_now = new Date(now + 60*1000);
+
+  $scope.$on('onTrigger', function(event, id, state, json) {
+    console.log('notification ADDED, id: ' + id  + ' state:' + state + ' json:' + json );
+  });
+
+
+
+  $scope.setAlarm = function(prey) {
+      $scope.currentAlarm = prey;
+      if($localstorage.hasValue(prey.title)){
+        $localstorage.set(prey.title,false);
+      }else {
+        $scope.modal.show();
+      
+      }
+      $scope.playlists = preyTimesService.getPreyTimesForDay(1);
+
+  };
+
+   $scope.addAlarm = function() {
+
+      //Hvis klokken er mer enn alarm tid. Sett alarm for
+
+
+
+      $localstorage.set($scope.currentAlarm.title,$scope.preyOffset);
+      $scope.playlists = preyTimesService.getPreyTimesForDay(1);
+      $scope.modal.hide();
+  };
+ 
 
   $scope.navTitle = '<div class="icon-home"></div>';
 
@@ -43,6 +202,72 @@ angular.module('starter.controllers', [])
     }
     return false;
   };
+
+  //Hvis du er på preyitem og den starter før tiden og neste bønn starter i fremtiden
+
+
+//Gå gjennom alle bønner
+//Er start tid før dagens tid <- passed
+//Er start tid før dagens bønn og neste bønn ikke har startet/eller det finnes ikke flere  <- active
+
+
+/*
+  var isActive = function(){
+ 
+    var date = 
+    for(var i =0;i<$scope.playlists.length;i++){
+       var prey = $scope.playlists[i];
+
+      var date = _getDateFromPrey(prey);
+      if(date.isAfter(today)){
+        active.countDown = (date - today)/1000;
+        if()
+              
+      }
+      
+    };
+
+
+  };
+  */
+
+  /*
+        private boolean isActive(PreyItem preyItem) {
+    List<PreyItem> candidates = new ArrayList<PreyItem>();
+    if (!preyItem.getTime().isBeforeNow())
+      return false;
+    for (PreyItem candiate : preyTimes) {
+      if (candiate.getTime().isBeforeNow()) {
+        candidates.add(candiate);
+      }
+    }
+    Collections.sort(candidates);
+    return candidates.get(candidates.size() - 1).equals(preyItem)
+        && (preyItem.getTime().getDayOfMonth() == DateTime.now()
+            .getDayOfMonth() && preyItem.getTime().getMonthOfYear() == DateTime
+            .now().getMonthOfYear());
+  }
+
+  private boolean isNext(PreyItem preyItem) {
+    if (!preyItem.getTime().isAfterNow())
+      return false;
+    if (preyItem.getTime().getDayOfYear() == currentDate.getDayOfYear()) {
+      List<PreyItem> candidates = new ArrayList<PreyItem>();
+      for (PreyItem candiate : preyTimes) {
+        if (candiate.getTime().isAfterNow()) {
+          candidates.add(candiate);
+        }
+      }
+      Collections.sort(candidates);
+      return candidates.get(0).equals(preyItem);
+    } else {
+      return false;
+    }
+  }
+  
+  */
+
+
 
   var findActiveAndNextPrey = function () {
     var active = null; 
@@ -76,11 +301,15 @@ angular.module('starter.controllers', [])
 
 
   $scope.nextDay = function() {
-     $scope.currentPreyDateDisplayed = moment().add(1, 'days');
+     $scope.currentPreyDateDisplayed = $scope.currentPreyDateDisplayed.add(1, 'days');
+     $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
+      findActiveAndNextPrey();
   };
 
   $scope.prevDay = function() {
-     $scope.currentPreyDateDisplayed = moment().subtract(1, 'days');
+     $scope.currentPreyDateDisplayed = $scope.currentPreyDateDisplayed.subtract(1, 'days');
+     $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
+      findActiveAndNextPrey();
   };
 
   findActiveAndNextPrey();

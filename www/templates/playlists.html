@@ -24,16 +24,16 @@
         </div-->  
 
         <div class="nav-header">
-          <div class="nav-left">
+          <div class="nav-left" ng-click="prevDay()">
             <div class="nav-left-icon">
             </div>
           </div>
-          <div class="nav-right">
+          <div class="nav-right" ng-click="nextDay()">
             <div class="nav-right-icon">
             </div>
           </div>
           <div class="nav-center">
-            Onsdag 10.10.2014
+            {{currentPreyDateDisplayed.format('dddd MM YYYY')}}
           </div>
         </div>
 
@@ -61,10 +61,10 @@
       </div-->
 
       <div ng-repeat="playlist in playlists" class="preyrow">
-        <div ng-class="playlist.isNext ? 'active-prey-sidebar' : 'sidestatus'">
+        <div ng-class="playlist.isActive ? 'active-prey-sidebar' : 'sidestatus'">
         
         </div>
-        <div class="container" ng-class="{ 'active-prey': playlist.isNext }">
+        <div class="container" ng-class="{ 'active-prey': playlist.isActive }">
             <div class="prey">
                {{playlist.title}}
             </div>
@@ -75,7 +75,7 @@
              <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
             </div>
             <div class="alarm">
-              <div class="alarm-box icon-alarm">
+              <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'" class="icon-alarm" ng-click="setAlarm(playlist)">
 
               </div> 
             </div>

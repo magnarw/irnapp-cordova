@@ -1,0 +1,87 @@
+<ion-view   title="{{navTitle}}">
+  <ion-nav-buttons class="bar-header bar-dark" side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+     
+  </ion-nav-buttons>
+
+ 
+  <ion-header-bar class="bar-light bar-subheader">
+    <div class="nav-header">
+          <div class="nav-left" ng-click="prevDay()">
+            <div class="nav-left-icon" ng-click="prevDay()">
+            </div>
+          </div>
+          <div class="nav-right" ng-click="nextDay()">
+            <div class="nav-right-icon" ng-click="nextDay()">
+            </div>
+          </div>
+          <div class="nav-center-input">
+          <input value="{{currentPreyDateDisplayed.format('dddd MM YYYY')}}"  ng-click="showDatePicker()" type="button"  />
+        </div>
+        </div>
+         <div class="row app-background header-cal" id="header">
+         
+           <div class="clander-item-day-nav">
+               Dag
+            </div>
+           <div class="clander-item-nav">
+               Fajr
+            </div>
+            <div class="clander-item-nav">
+             Soloppgang
+            </div>
+            <div class="clander-item-nav">
+              Duhr
+            </div>
+            <div class="clander-item-nav">
+              Asr
+            </div>
+            <div class="clander-item-nav">
+             Maghrib
+            </div>
+             <div class="clander-item-nav">
+             Isha
+            </div>
+
+        </div>     
+  </ion-header-bar>
+
+  <ion-content scroll="true">
+  
+
+
+   
+
+
+        
+    <div ion-scroll direction="y" ng-repeat="day in days" class="day-row">
+        
+        <div class="day-container" ng-class="{ 'active-day': $index == activeIndex }" ng-click="setActive($index)">
+            <div ng-class="$index == activeIndex ? 'active-day-sidebar' : 'sidestatus-day'">
+            
+            </div>
+            <div class="clander-item-day">
+               {{$index+1}}
+            </div>
+            <div class="clander-item">
+               {{day[0].time}}
+            </div>
+            <div class="clander-item">
+              {{day[1].time}}
+            </div>
+            <div class="clander-item">
+               {{day[2].time}}
+            </div>
+            <div class="clander-item">
+              {{day[3].time}}
+            </div>
+            <div class="clander-item">
+              {{day[4].time}}
+            </div>
+        </div>
+           
+      </div>
+
+  </ion-content>
+</ion-view>
+
