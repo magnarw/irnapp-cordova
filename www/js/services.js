@@ -25,9 +25,24 @@ angular.module('starter.services', [])
       return JSON.parse($window.localStorage[key] || '{}');
     }
   }
-}]).service('preyTimesService', function($localstorage){
+}]).service('preyTimesService', function($localstorage,$http){
     
 	this.getPreyTimesForDay = function(day){
+
+       var settings = $localstorage.getObject('settings');
+        var city = 'Oslo';
+        var skygge2 = true; 
+
+        if(settings!=null){
+            if(settings.city!=null){
+                skygge2 = settings.skygge2by;
+            }else {
+                skygge2 = settings.skygge2;
+            } 
+        }
+
+
+      
 
 		var prey = this.preytimes.Oslo.Row[day];
 
@@ -37,14 +52,22 @@ angular.module('starter.services', [])
 		    { title: 'Fajr', time :cleanTime(prey._C), hasAlarm :$localstorage.hasValue("Fajr"), id: 1, isActive : false ,isNext : false},
 		    { title: 'Soloppgang',time :cleanTime(prey._D), hasAlarm : $localstorage.hasValue("Soloppgang"),id: 2, isActive : false,isNext : false},
 		    { title: 'Duhr', time : cleanTime(prey._F), hasAlarm : $localstorage.hasValue("Duhr"),id: 3, isActive : false,isNext : false},
-		    { title: 'Asr', time : cleanTime(prey._G), hasAlarm : $localstorage.hasValue("Duhr"),id: 3, isActive : false,isNext : false},
-		    { title: 'Maghrib', time : cleanTime(prey._H), hasAlarm : $localstorage.hasValue("Maghrib"),id: 4, isActive : true,isNext : false},
+		    { title: 'Asr', time : cleanTime(prey._G), hasAlarm : $localstorage.hasValue("Asr"),id: 3, isActive : false,isNext : false},
+		    { title: 'Maghrib', time : cleanTime(prey._H), hasAlarm : $localstorage.hasValue("Maghrib"),id: 4, isActive : false,isNext : false},
 		    { title: 'Isha', time : cleanTime(prey._I), hasAlarm : $localstorage.hasValue("Isha"), id: 5, isActive : false,isNext : false},
 		  
 		  ];
 
 		  return preyForDay;
 	};
+
+    var fetchCorrectPreyTimesForDay = function(city,day){
+
+        $http.get('preytimes/halden.json').success(function(data) {
+           var prey = data[day];
+        });
+    };
+
 
     this.getPreyTimesForMonth = function(start,end){
 
@@ -889,7 +912,7 @@ angular.module('starter.services', [])
                 "_D": "6:15:00 AM",
                 "_F": "12:34:00 PM",
                 "_G": "3:32:00 PM",
-                "_H": "6:35:00 PM",
+                "_H": "8:35:00 PM",
                 "_I": "8:59:00 PM"
             },
             {
@@ -2889,7 +2912,7 @@ angular.module('starter.services', [])
                 "_D": "7:34:00 AM",
                 "_F": "1:15:00 PM",
                 "_G": "3:45:00 PM",
-                "_H": "6:35:00 PM",
+                "_H": "8:35:00 PM",
                 "_I": "8:52:00 PM"
             },
             {

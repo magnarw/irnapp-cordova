@@ -80,6 +80,15 @@ window.plugin.notification.local.ontrigger = function(id, state, json) {
       }
     }
   })
+  .state('app.settings', {
+    url: "/settings",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/settings.html",
+        controller: 'SettingsController'
+      }
+    }
+  })
   .state('app.aboutirn', {
     url: "/aboutirn",
     views: {

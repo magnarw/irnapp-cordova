@@ -3,162 +3,118 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
 
-  <ion-content>
+    
+
+  <ion-content scroll="false" >
         
-        <!--div class="row app-background" id="navigation">
-           <div class="col col-20">
-              <button class="button button-dark">
-                <
-              </button>
-           </div>
-           <div class="col col-60">
-            <button class="button button-dark">
-                Onsdag 26.10.2014
-              </button> 
+     <div class="fill-height-or-more" id="flexContainer"> <!-- Flex container -->
+     <div class="preynavigation">
+            <div class="nav-left" ng-click="prevDay()">
+              <div class="nav-left-icon">
+              </div>
             </div>
-           <div class="col col-20">
-              <button class="button button-dark">
-                >
-              </button> 
+             <div class="nav-center" ng-click="showDatePicker()">
+                {{currentPreyDateDisplayed.format('dddd MM YYYY')}}
             </div>
-        </div-->  
-
-        <div class="nav-header">
-          <div class="nav-left" ng-click="prevDay()">
-            <div class="nav-left-icon">
+            <div class="nav-right" ng-click="nextDay()">
+              <div class="nav-right-icon">
+              </div>
             </div>
-          </div>
-          <div class="nav-right" ng-click="nextDay()">
-            <div class="nav-right-icon">
-            </div>
-          </div>
-          <div class="nav-center">
-            {{currentPreyDateDisplayed.format('dddd MM YYYY')}}
-          </div>
         </div>
+      
+         <div class="preynav-header">
+          <div class="sidestatus-header">
+            
+          </div>
+          <div class="prey-header">
+            Bønn
+          </div>
+          <div class="time-header">
+            Tid
+          </div>
+          <div class="timeagin-header">
+            Tid igjen
+          </div>
+          <div class="alarm-header">
+            Alarm
+          </div>
+         </div> 
 
-
-        <div class="row app-background header" id="header">
-            <div class="col col-30">Bønn</div>
-          <div class="col col-30">Tid</div>
-          <div class="col col-20"> 
-           Tid igjen
-         </div>
-         <div class="col col-15">Alarm</div>
-
-        </div>  
-
-        <!--div ng-repeat="playlist in playlists" class="row" ng-class="{ 'active-prey': playlist.isNext }">
-          <div class="col col-30"> {{playlist.title}}</div>
-          <div class="col col-30"> {{playlist.time}}</div>
-          <div class="col col-20"> 
+     <div class="preycontainer"> <!-- Flex item: Takes up 60% of parent. Also flex box. Direction : row. wrap. align content : strech -->
+      <div class="preyrow" ng-repeat="playlist in playlists">  <!-- Flex item: Flex basis : 100% . Also flex box : Direction row. no-wrap . space between-->
+        <div ng-class="playlist.isActive ? 'active-prey-sidebar' : 'sidestatus'"> <!-- Not flex item. Takes up 100%-->
+         
+        </div>
+        <div class="prey">
+           {{playlist.title}}
+        </div>
+        <div class="time">
+           {{playlist.time}}
+        </div>
+        <div class="timeagin">
            <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
-         </div>
-         <div class="col col-15">
-            <div class="alarm icon-alarm-inactive">
-            </div>
-         </div>
-      </div-->
-
-      <div ng-repeat="playlist in playlists" class="preyrow">
-        <div ng-class="playlist.isActive ? 'active-prey-sidebar' : 'sidestatus'">
-        
         </div>
-        <div class="container" ng-class="{ 'active-prey': playlist.isActive }">
-            <div class="prey">
-               {{playlist.title}}
-            </div>
-            <div class="time">
-                {{playlist.time}}
-            </div>
-            <div class="timeagin">
-             <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
-            </div>
-            <div class="alarm">
-              <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'" class="icon-alarm" ng-click="setAlarm(playlist)">
+        <div class="alarm"> <!-- flex container. Used for centering alarm icon-->
+            <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'"  ng-click="setAlarm(playlist)">
 
               </div> 
-            </div>
         </div>
-           
+      </div>    
       </div>
-
-
-      <div class="button-group app-background">
+        <div class="shortcutcontainer">  <!-- Flex item: Takes up 40% of parent. Also flex container.  -->
+        <div class="button-group app-background">  
+          <div class="button-irn" onclick="window.open('http://www.muslimskesenter.no/', '_blank', 'location=yes'); return false;">
+            <div class="icon icon-calender">&nbsp;</div>
+            <div class="text">Bønnekalender</div>
+          </div>
           
-            <div class="button" onclick="window.open('http://www.muslimskesenter.no/', '_blank', 'location=yes'); return false;">
-              <div class="icon icon-calender">&nbsp;</div>
-              <div class="text">Bønnekalender</div>
-            </div>
+          <div class="button-irn">
+            <div class="icon icon-enr">&nbsp;</div>
+            <div class="text">E-nr database</div>
+          </div>
           
-            <div class="button">
-              <div class="icon icon-enr">&nbsp;</div>
-              <div class="text">E-nr database</div>
-            </div>
+          <div class="button-irn">
+            <div class="icon icon-pro">&nbsp;</div>
+            <div class="text">Pro og prod</div>
+          </div>
+        </div>  
+       <div class="button-group app-background" id="header">
+          <div class="button-irn">
+            <div class="icon icon-hjiri">&nbsp;</div>
+            <div class="text">Hijiri</div>
+          </div>
           
-            <div class="button">
-              <div class="icon icon-pro">&nbsp;</div>
-              <div class="text">Pro og prod</div>
-            </div>
-
-      </div>  
-
-     <div class="button-group app-background" id="header">
-        <div class="inner">
-            <div class="button left">
-              <div class="icon icon-hijiri">&nbsp;</div>
-              <div class="text">Hijiri</div>
-            </div>
+          <div class="button-irn">
+            <div class="icon icon-mosque">&nbsp;</div>
+            <div class="text">Moskeer</div>
+          </div>
           
-            <div class="button center">
-              <div class="icon icon-mosque">&nbsp;</div>
-              <div class="text">Mokser</div>
-            </div>
-          
-            <div class="button right">
-              <div class="icon icon-shop">&nbsp;</div>
-              <div class="text">Butikk og serv</div>
-            </div>
-         </div>     
-      </div>  
+          <div class="button-irn">
+            <div class="icon icon-shop">&nbsp;</div>
+            <div class="text">Butikk og serv</div>
+          </div> 
+        </div>  
 
          <div class="button-group app-background" id="header">
-        <div class="inner">
-            <div class="button left">
-              <div class="icon icon-qibla">&nbsp;</div>
-              <div class="text">Qibla</div>
-            </div>
+        
+          <div class="button-irn">
+            <div class="icon icon-qibla">&nbsp;</div>
+            <div class="text">Qibla</div>
+          </div>
           
-            <div class="button center">
-              <div class="icon icon-calender">&nbsp;</div>
-              <div class="text">Om rin</div>
-            </div>
+          <div class="button-irn">
+            <div class="icon icon-aboutirn">&nbsp;</div>
+            <div class="text">Om IRN</div>
+          </div>
           
-            <div class="button right">
-              <div class="icon icon-calender">&nbsp;</div>
-              <div class="text">Innstillinger</div>
-            </div>
-         </div>     
-      </div>  
-
-
-      <!--div class="button-bar">
-        <a class="button icon icon-left icon-hijiri" onclick="window.open('https://plus.google.com/+NicRaboy', '_blank', 'location=yes'); return false;">First</a>
-        <a class="button">Second</a>
-        <a class="button">Third</a>
+          <div class="button-irn" ng-click="changeView('/app/settings')">
+            <div class="icon icon-settings">&nbsp;</div>
+            <div class="text">Innstillinger</div>
+          </div>
+            
+        </div>  
       </div>
-      <div class="button-bar">
-        <a class="button">First</a>
-        <a class="button">Second</a>
-        <a class="button">Third</a>
-      </div>
-      <div class="button-bar">
-        <a class="button">First</a>
-        <a class="button">Second</a>
-        <a class="button">Third</a>
-      </div-->
-      
-       
+     </div>
 
       
   </ion-content>

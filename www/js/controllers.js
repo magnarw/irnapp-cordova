@@ -132,7 +132,12 @@ $scope.showDatePicker = function () {
 
   
 })
-.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage) {
+.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker) {
+
+
+
+
+
     
   $scope.currentPreyDateDisplayed =  moment(); 
   $scope.currentPreyDateDisplayed.hours(0);
@@ -165,7 +170,29 @@ $scope.showDatePicker = function () {
     console.log('notification ADDED, id: ' + id  + ' state:' + state + ' json:' + json );
   });
 
+  $scope.showDatePicker = function () {
+  var options = {
+    date: new Date(),
+    mode: 'date',
+    minDate:  moment().subtract(100, 'years').toDate(),
+    allowOldDates: true,
+    allowFutureDates: false,
+    doneButtonLabel: 'Done',
+    doneButtonColor: '#000000',
+    cancelButtonLabel: 'Abort',
+    cancelButtonColor: '#000000'
+  };
+  
 
+  $cordovaDatePicker.show(options).then(function(date){
+     if(date != undefined){
+        $scope.currentPreyDateDisplayed = moment(date);
+        $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
+        findActiveAndNextPrey();
+     }
+  
+  });
+  };
 
   $scope.setAlarm = function(prey) {
       $scope.currentAlarm = prey;
@@ -269,22 +296,45 @@ $scope.showDatePicker = function () {
 
 
 
-  var findActiveAndNextPrey = function () {
-    var active = null; 
-    var next = null; 
-    today = moment();
+  var findActive = function() {
+    var active = null;
+    for(var i =0;i<$scope.playlists.length;i++){
+      var prey = $scope.playlists[i];
+      var date = _getDateFromPrey(prey);
+      if(date.isBefore(today)){
+        active = prey; 
+      }
+    }
+    return active; 
+  }
+
+   var findNext = function() {
+  
     for(var i =0;i<$scope.playlists.length;i++){
       var prey = $scope.playlists[i];
       var date = _getDateFromPrey(prey);
       if(date.isAfter(today)){
-        active = prey; 
-        active.countDown = (date - today)/1000;
-      
+        return prey;
       }
     }
-    if(active!==null){
-      active.isNext = true; 
+    
+  }
+
+
+  var findActiveAndNextPrey = function () {
+
+    var active = findActive(); 
+    if(active != null){
+      active.isActive = true; 
     }
+    var next = findNext(); 
+    if(next != null){
+      var date = _getDateFromPrey(next);
+      next.countDown = (date - today)/1000;
+      next.isNext = true; 
+    }
+
+
   }
 
  
@@ -317,5 +367,129 @@ $scope.showDatePicker = function () {
 
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PlaylistCtrl', function($scope, $stateParams,$localstorage) {
+}).controller('SettingsController', function($scope,$localstorage) {
+  
+  $scope.navTitle = '<div class="icon-home"></div>';
+
+  $scope.settings = { 'calendarBasic' : true, 'calenderCity': false ,'city' : 'Oslo','skygge1': false, 'skygge2' : true, 'skygge1by': false, 'skygge2by' : false};
+
+  $scope.city = null; 
+  $scope.skygge1 = false;
+  $scope.skygge2 = false; 
+  $scope.isDisabledBy = true;
+  $scope.isDisabledStandard = true;
+
+  var functionRenderSettings = function(){
+     if($localstorage.hasValue("settings")){
+        $scope.settings = $localstorage.getObject('settings');
+     }
+  }
+
+  
+ 
+
+    $scope.$watch('settings.city', function(newVal,oldVal) {
+      $localstorage.setObject('settings',  $scope.settings);
+   },true);
+
+      $scope.$watch('settings.calendarCity', function(newVal,oldVal) {
+
+         if(newVal == true) {
+            $scope.settings.calendarBasic = false; 
+            $scope.settings.calendarCity = true; 
+            $scope.settings.skygge1 = false; 
+            $scope.settings.skygge2 = false; 
+            $scope.settings.skygge2by = true;
+            $scope.settings.skygge1by = false;
+
+         };
+         if(newVal == false &&  $scope.settings.calendarBasic == false)
+             $scope.settings.skygge2 = true; 
+
+
+        $localstorage.setObject('settings',  $scope.settings);
+   },true);
+
+   $scope.$watch('settings.skygge1', function(newVal,oldVal) {
+
+      if(newVal == true){
+        $scope.settings.calendarBasic = true; 
+        $scope.settings.calendarCity = false; 
+        $scope.settings.skygge2 = false; 
+        $scope.settings.skygge1 = true; 
+        $scope.settings.skygge1by = false;  
+        $scope.settings.skygge2by = false;  
+
+      }
+      if(newVal == false){
+        if(!$scope.settings.calendarCity)
+          $scope.settings.skygge2 = true; 
+      }
+
+      $localstorage.setObject('settings',  $scope.settings);
+   },true);
+
+    $scope.$watch('settings.skygge2', function(newVal,oldVal) {
+      if(newVal == true){
+        $scope.settings.calendarBasic = true; 
+        $scope.settings.calendarCity = false; 
+        $scope.settings.skygge1 = false;
+        $scope.settings.skygge2 = true; 
+        $scope.settings.skygge1by = false;  
+        $scope.settings.skygge2by = false;  
+
+      }
+      if(newVal == false){
+         if(!$scope.settings.calendarCity)
+          $scope.settings.skygge1 = true; 
+      }
+
+      $localstorage.setObject('settings',  $scope.settings);
+   },true);
+
+
+   $scope.$watch('settings.skygge1by', function(newVal,oldVal) {
+     
+
+      if(newVal == true){
+        $scope.settings.skygge2by = false;  
+        $scope.settings.skygge1by = true;  
+        $scope.settings.calendarBasic = false;
+        $scope.settings.skygge1 = false; 
+        $scope.settings.skygge2 = false; 
+        $scope.settings.calendarCity = true; 
+      }
+
+      if(newVal == false && $scope.settings.calendarCity){
+          $scope.settings.skygge2by = true;  
+      }
+
+      $localstorage.setObject('settings',  $scope.settings);
+
+   },true);
+
+    $scope.$watch('settings.skygge2by', function(newVal,oldVal) {
+      
+
+      if(newVal == true){
+        $scope.settings.skygge2by = true;  
+        $scope.settings.skygge1by = false;  
+        $scope.settings.calendarBasic = false;
+        $scope.settings.skygge1 = false; 
+        $scope.settings.skygge2 = false; 
+        $scope.settings.calendarCity = true; 
+      }
+
+      if(newVal == false && $scope.settings.calendarCity){
+          $scope.settings.skygge1by = true;  
+      }
+
+      $localstorage.setObject('settings',  $scope.settings);
+
+   },true);
+
+  functionRenderSettings();
+
+  
 });
