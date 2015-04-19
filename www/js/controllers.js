@@ -46,21 +46,20 @@ angular.module('starter.controllers', [])
   $scope.navTitle = '<div class="icon-home"></div>';
 
   $scope.currentPreyDateDisplayed =  moment(); 
-  var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
-
+  var start =  moment($scope.currentPreyDateDisplayed).startOf('month');
     // Clone the value before .endOf()
-  var end = moment(start).endOf('month');
+  var end  =moment($scope.currentPreyDateDisplayed).endOf('month');
 
 $scope.example = {
        value: new Date(2013, 9, 1)
      };
 
-  $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+  preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear(), function(data){ $scope.days = data});
 
-  $scope.activeIndex = $scope.currentPreyDateDisplayed.date();
+  $scope.activeIndex = $scope.currentPreyDateDisplayed.date()-1;
 
   $scope.setActive = function(index){
-    $scope.activeIndex = index +1; 
+    $scope.activeIndex = index; 
 
 
   }; 
@@ -81,32 +80,32 @@ $scope.showDatePicker = function () {
   $cordovaDatePicker.show(options).then(function(date){
      if(date != undefined){
         $scope.currentPreyDateDisplayed = moment(date);
-         var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+        var localStart =  $scope.currentPreyDateDisplayed.startOf('month');
     // Clone the value before .endOf()
-        var end = moment(start).endOf('month');
+        var localEnd = $scope.currentPreyDateDisplayed.endOf('month');
         $scope.activeIndex = -1; 
-        $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+        preyTimesService.getPreyTimesForMonth(localStart.dayOfYear(),localEnd.dayOfYear(), function(data){ $scope.days = data});
      }
   
   });
   };
 
   $scope.nextDay = function(){
-      $scope.currentPreyDateDisplayed.add(1, 'month');
-       var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+      $scope.currentPreyDateDisplayed = $scope.currentPreyDateDisplayed.add(1, 'month');
+         var localStart =  moment($scope.currentPreyDateDisplayed).startOf('month');
     // Clone the value before .endOf()
-        var end = moment(start).endOf('month');
+        var localEnd  =moment($scope.currentPreyDateDisplayed).endOf('month');
         $scope.activeIndex = -1; 
-        $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+        preyTimesService.getPreyTimesForMonth(localStart.dayOfYear(),localEnd.dayOfYear(), function(data){ $scope.days = data});
   };
 
   $scope.prevDay = function(){
-     $scope.currentPreyDateDisplayed.add(-1, 'month');
-        var start = moment([$scope.currentPreyDateDisplayed.year(), $scope.currentPreyDateDisplayed.month()- 1]);
+     $scope.currentPreyDateDisplayed = $scope.currentPreyDateDisplayed.add(-1, 'month');
+         var localStart =  moment($scope.currentPreyDateDisplayed).startOf('month');
     // Clone the value before .endOf()
-        var end = moment(start).endOf('month');
+        var localEnd  =moment($scope.currentPreyDateDisplayed).endOf('month');
         $scope.activeIndex = -1; 
-        $scope.days = preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear());
+        preyTimesService.getPreyTimesForMonth(localStart.dayOfYear(),localEnd.dayOfYear(), function(data){ $scope.days = data});
   };
 
 
@@ -132,10 +131,25 @@ $scope.showDatePicker = function () {
 
   
 })
-.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker) {
+.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService) {
+
+  $scope.preyOffset = 5;
+
+  var findActiveAndNextPrey = function (data) {
+    $scope.playlists = data;
+    var active = findActive(); 
+    if(active != null){
+      active.isActive = true; 
+    }
+    var next = findNext(); 
+    if(next != null){
+      var date = _getDateFromPrey(next);
+      next.countDown = (date - today)/1000;
+      next.isNext = true; 
+    }
 
 
-
+  }
 
 
     
@@ -143,7 +157,7 @@ $scope.showDatePicker = function () {
   $scope.currentPreyDateDisplayed.hours(0);
   $scope.currentPreyDateDisplayed.seconds(0);
   $scope.currentPreyDateDisplayed.minutes(0);
-  $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
+  preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
   var today = moment();
 
 
@@ -187,33 +201,38 @@ $scope.showDatePicker = function () {
   $cordovaDatePicker.show(options).then(function(date){
      if(date != undefined){
         $scope.currentPreyDateDisplayed = moment(date);
-        $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
-        findActiveAndNextPrey();
+        preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+        
      }
   
   });
   };
 
+
   $scope.setAlarm = function(prey) {
       $scope.currentAlarm = prey;
       if($localstorage.hasValue(prey.title)){
-        $localstorage.set(prey.title,false);
+        alarmService.cancelAlarm(prey.title);
       }else {
         $scope.modal.show();
       
       }
-      $scope.playlists = preyTimesService.getPreyTimesForDay(1);
+        preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
 
   };
 
-   $scope.addAlarm = function() {
+   $scope.addAlarm = function(preyOffset) {
 
       //Hvis klokken er mer enn alarm tid. Sett alarm for
 
+      alarmService.setAlarm($scope.currentAlarm.title,preyOffset);
 
+    //  $localstorage.set($scope.currentAlarm.title,$scope.preyOffset);
+      preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+      $scope.modal.hide();
+  };
 
-      $localstorage.set($scope.currentAlarm.title,$scope.preyOffset);
-      $scope.playlists = preyTimesService.getPreyTimesForDay(1);
+   $scope.closeAlarm = function() {
       $scope.modal.hide();
   };
  
@@ -303,8 +322,14 @@ $scope.showDatePicker = function () {
       var date = _getDateFromPrey(prey);
       if(date.isBefore(today)){
         active = prey; 
+        prey.passed = true;
+
+        if(moment().diff(date, 'days')==0){
+          
+        }
       }
     }
+
     return active; 
   }
 
@@ -321,8 +346,8 @@ $scope.showDatePicker = function () {
   }
 
 
-  var findActiveAndNextPrey = function () {
-
+  var findActiveAndNextPrey = function (data) {
+    $scope.playlists = data;
     var active = findActive(); 
     if(active != null){
       active.isActive = true; 
@@ -352,17 +377,17 @@ $scope.showDatePicker = function () {
 
   $scope.nextDay = function() {
      $scope.currentPreyDateDisplayed = $scope.currentPreyDateDisplayed.add(1, 'days');
-     $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
-      findActiveAndNextPrey();
+    preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+      
   };
 
   $scope.prevDay = function() {
      $scope.currentPreyDateDisplayed = $scope.currentPreyDateDisplayed.subtract(1, 'days');
-     $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear());
-      findActiveAndNextPrey();
+     $scope.playlists = preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+      
   };
 
-  findActiveAndNextPrey();
+  
 
 
 })

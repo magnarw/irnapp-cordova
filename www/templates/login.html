@@ -1,27 +1,29 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Sett alarm for Asr</h1>
+    <h3 class="title">Sett alarm for {{currentAlarm.title}}</h3>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Lukk</button>
+      
     </div>
   </ion-header-bar>
   <ion-content>
 
   <div class="card">
     <div class="item item-text-wrap">
-      Velg antall minutter før bønn
+      Velg antall minutter alarmen skal gå av før bønnetid
     </div>
+     <h1> {{preyOffset}} min</h1>
    
   </div>
-  <h3> {{preyOffset}} min</h3>
+
+ 
    
   <div class="range">
-      <input type="range" name="volume" ng-model="preyOffset" min="0" max="10" value="0">
+      <input type="range" name="volume" ng-model="preyOffset" min="0" max="10" value="5">
   </div>
 
   <div class="button-bar">
-  <a class="button" ng-click="addAlarm()">Sett alarm</a>
-  <a class="button">Avbryt</a>
+  <a class="button" ng-click="addAlarm(preyOffset)">Sett alarm</a>
+  <a class="button" ng-click="closeAlarm()" >Avbryt</a>
   
 </div>
 

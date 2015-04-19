@@ -443,6 +443,19 @@ border-style:none;
 	background: #434343; 
 }
 
+.nav-center:active {
+ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#147639), to(#242424));
+}
+
+.nav-right:active {
+ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#147639), to(#242424));
+}
+
+
+.nav-left:active {
+ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#147639), to(#242424));
+}
+
 
 .nav-right {
 	width: 15%;
@@ -657,7 +670,7 @@ display:-webkit-box;
 .preyrow .alarm {
 	width : 15%; 
   background: #f5f5f5; 
-  border: 1px solid  #dedede;
+  border-left: 1px solid  #dedede;
    padding: 5px;
   
 }
@@ -777,7 +790,12 @@ div.day-container {
 
 
 
+.passed {
 
+background-color:#dedede;
+
+  
+}
 
    
 
@@ -883,9 +901,13 @@ background-size: 20px 20px;
 
 .top {
 
-	margin-top:  15px;
+	margin-top:  35px;
 }
 
+.hackinghight {
+
+	height: 35px;
+}
 
 
 

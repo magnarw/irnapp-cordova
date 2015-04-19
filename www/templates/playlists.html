@@ -1,4 +1,4 @@
-<ion-view   title="{{navTitle}}">
+<ion-view   title="{{navTitle}}" ng-click="changeView('/app/aboutirn')">
   <ion-nav-buttons class="bar-header bar-dark" side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -54,8 +54,8 @@
         <div class="timeagin">
            <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
         </div>
-        <div class="alarm"> <!-- flex container. Used for centering alarm icon-->
-            <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'"  ng-click="setAlarm(playlist)">
+        <div class="alarm" ng-click="setAlarm(playlist)"> <!-- flex container. Used for centering alarm icon-->
+            <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'"  >
 
               </div> 
         </div>
@@ -63,7 +63,7 @@
       </div>
         <div class="shortcutcontainer">  <!-- Flex item: Takes up 40% of parent. Also flex container.  -->
         <div class="button-group app-background">  
-          <div class="button-irn" onclick="window.open('http://www.muslimskesenter.no/', '_blank', 'location=yes'); return false;">
+          <div class="button-irn" ng-click="changeView('/app/calender')">
             <div class="icon icon-calender">&nbsp;</div>
             <div class="text">Bønnekalender</div>
           </div>
@@ -102,7 +102,7 @@
             <div class="text">Qibla</div>
           </div>
           
-          <div class="button-irn">
+          <div class="button-irn" ng-click="changeView('/app/aboutirn')">
             <div class="icon icon-aboutirn">&nbsp;</div>
             <div class="text">Om IRN</div>
           </div>
