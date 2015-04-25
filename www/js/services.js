@@ -64,7 +64,7 @@ angular.module('starter.services', [])
             var preyForDay = [
                 { title: 'Fajr', time :cleanTime(prey.Fajr), hasAlarm :$localstorage.hasValue("Fajr"), id: 1, isActive : false ,isNext : false},
                 { title: 'Soloppgang',time :cleanTime(prey.Soloppgang), hasAlarm : $localstorage.hasValue("Soloppgang"),id: 2, isActive : false,isNext : false},
-                { title: 'Duhr', time : cleanTime(prey.Duhr), hasAlarm : $localstorage.hasValue("Duhr"),id: 3, isActive : false,isNext : false},
+                { title: 'Dhuhr', time : cleanTime(prey.Duhr), hasAlarm : $localstorage.hasValue("Dhuhr"),id: 3, isActive : false,isNext : false},
                 { title: 'Asr', time : skygge2?cleanTime(prey.Asr2):cleanTime(prey.Asr1), hasAlarm : $localstorage.hasValue("Asr"),id: 4, isActive : false,isNext : false},
                 { title: 'Maghrib', time : cleanTime(prey.Magribh), hasAlarm : $localstorage.hasValue("Maghrib"),id: 5, isActive : false,isNext : false},
                 { title: 'Isha', time : cleanTime(prey.Isha), hasAlarm : $localstorage.hasValue("Isha"), id: 6, isActive : false,isNext : false},
@@ -105,7 +105,7 @@ angular.module('starter.services', [])
             var day = [
                 { title: 'Fajr', time :cleanTime(prey.Fajr), id: 1, isActive : false ,isNext : false},
                 { title: 'Soloppgang',time :cleanTime(prey.Soloppgang), id: 2, isActive : false,isNext : false},
-                { title: 'Duhr', time : cleanTime(prey.Duhr),id: 3, isActive : false,isNext : false},
+                { title: 'Dhuhr', time : cleanTime(prey.Duhr),id: 3, isActive : false,isNext : false},
                 { title: 'Asr', time : skygge2?cleanTime(prey.Asr2):cleanTime(prey.Asr1),id: 4, isActive : false,isNext : false},
                 { title: 'Maghrib', time : cleanTime(prey.Magribh),id: 5, isActive : false,isNext : false},
                 { title: 'Isha', time : cleanTime(prey.Isha),id: 6, isActive : false,isNext : false},

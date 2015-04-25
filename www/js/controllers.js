@@ -7,6 +7,12 @@ angular.module('starter.controllers', [])
             $location.path(view); // path not hash
   }
   $scope.navTitle = '<div class="icon-home"></div>';
+
+
+  $scope.differentTapTitle = function(){
+
+    console.log("lbbf");
+  }
 })
 
 .controller('HijiriCtrl', function($scope) {
@@ -133,6 +139,11 @@ $scope.showDatePicker = function () {
 })
 .controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService) {
 
+    $scope.differentTapTitle = function(){
+    
+    console.log("lbbf");
+  }
+
   $scope.preyOffset = 5;
 
   var findActiveAndNextPrey = function (data) {
@@ -190,7 +201,7 @@ $scope.showDatePicker = function () {
     mode: 'date',
     minDate:  moment().subtract(100, 'years').toDate(),
     allowOldDates: true,
-    allowFutureDates: false,
+    allowFutureDates: true,
     doneButtonLabel: 'Done',
     doneButtonColor: '#000000',
     cancelButtonLabel: 'Abort',
@@ -237,7 +248,7 @@ $scope.showDatePicker = function () {
   };
  
 
-  $scope.navTitle = '<div class="icon-home"></div>';
+  $scope.navTitle = '<div class="icon-home" ng-click="differentTapTitle()"></div>';
 
   $scope.isNext = function(id) {
      for(var i =0;i<$scope.playlists.length;i++){
@@ -321,15 +332,17 @@ $scope.showDatePicker = function () {
       var prey = $scope.playlists[i];
       var date = _getDateFromPrey(prey);
       if(date.isBefore(today)){
-        active = prey; 
+        
         prey.passed = true;
 
-        if(moment().diff(date, 'days')==0){
-          
+        if(moment().isSame(date, 'day')){
+          active = prey; 
         }
       }
     }
-
+    if(active!=null){
+      active.passed = false; 
+    }
     return active; 
   }
 
@@ -338,7 +351,7 @@ $scope.showDatePicker = function () {
     for(var i =0;i<$scope.playlists.length;i++){
       var prey = $scope.playlists[i];
       var date = _getDateFromPrey(prey);
-      if(date.isAfter(today)){
+      if(date.isAfter(today) && today.isSame(date, 'day')){
         return prey;
       }
     }

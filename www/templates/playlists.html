@@ -1,4 +1,7 @@
-<ion-view   title="{{navTitle}}" ng-click="changeView('/app/aboutirn')">
+<ion-view>
+<ion-nav-title class="icon-home" ng-click="jall">
+   {{navTitle}}
+</ion-nav-title>
   <ion-nav-buttons class="bar-header bar-dark" side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -14,7 +17,7 @@
               </div>
             </div>
              <div class="nav-center" ng-click="showDatePicker()">
-                {{currentPreyDateDisplayed.format('dddd MM YYYY')}}
+                {{currentPreyDateDisplayed.format('D MMMM YYYY')}}
             </div>
             <div class="nav-right" ng-click="nextDay()">
               <div class="nav-right-icon">
@@ -41,11 +44,11 @@
          </div> 
 
      <div class="preycontainer"> <!-- Flex item: Takes up 60% of parent. Also flex box. Direction : row. wrap. align content : strech -->
-      <div class="preyrow" ng-repeat="playlist in playlists">  <!-- Flex item: Flex basis : 100% . Also flex box : Direction row. no-wrap . space between-->
+      <div class="preyrow" ng-repeat="playlist in playlists" ng-class="{'passed' : playlist.passed , 'active-prey' : playlist.isActive}">  <!-- Flex item: Flex basis : 100% . Also flex box : Direction row. no-wrap . space between-->
         <div ng-class="playlist.isActive ? 'active-prey-sidebar' : 'sidestatus'"> <!-- Not flex item. Takes up 100%-->
          
         </div>
-        <div class="prey">
+        <div class="prey" >
            {{playlist.title}}
         </div>
         <div class="time">
