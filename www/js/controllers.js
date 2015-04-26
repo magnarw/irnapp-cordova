@@ -6,12 +6,12 @@ angular.module('starter.controllers', [])
   $scope.changeView = function(view){
             $location.path(view); // path not hash
   }
-  $scope.navTitle = '<div class="icon-home"></div>';
+  
 
 
   $scope.differentTapTitle = function(){
 
-    console.log("lbbf");
+    $scope.changeView("/app/playlists");
   }
 })
 
@@ -139,11 +139,7 @@ $scope.showDatePicker = function () {
 })
 .controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService) {
 
-    $scope.differentTapTitle = function(){
-    
-    console.log("lbbf");
-  }
-
+  
   $scope.preyOffset = 5;
 
   var findActiveAndNextPrey = function (data) {

@@ -11,7 +11,7 @@
     
     <ion-content>
 
-      <div class="menu-container" ng-click="changeView('/app/playlist')">
+      <div class="menu-container" menu-close ng-click="changeView('/app/playlist')">
           <div class="menu-icon-home" ng-click="changeView('/app/playlist')"> 
           
           </div>
@@ -19,7 +19,7 @@
               Hjem
           </div>
       </div> 
-      <div class="menu-container">
+      <div class="menu-container" ng-click="changeView('/app/calender')" menu-close>
           <div class="menu-icon-calender"> 
           
           </div>
@@ -51,7 +51,7 @@
             Butikk og servering
           </div>
       </div>
-      <div class="menu-container">
+      <div class="menu-container" menu-close ng-click="changeView('/app/hijiri')">
           <div class="menu-icon-hijiri"> 
           
           </div>
@@ -59,7 +59,7 @@
             Hijri
           </div>
       </div>
-      <div class="menu-container" ng-click="changeView('/app/qibla')">
+      <div class="menu-container" menu-close ng-click="changeView('/app/qibla')">
           <div class="menu-icon-qibla"> 
           
           </div>
@@ -67,7 +67,7 @@
             Qibla
           </div>
       </div>
-       <div class="menu-container" ng-click="changeView('/app/aboutirn')">
+       <div class="menu-container" menu-close ng-click="changeView('/app/aboutirn')">
           <div class="menu-icon-aboutirn"> 
           
           </div>
@@ -75,7 +75,7 @@
            Om IRN
           </div>
       </div>
-        <div class="menu-container" ng-click="changeView('/app/settings')">
+        <div class="menu-container" menu-close ng-click="changeView('/app/settings')">
           <div class="menu-icon-settings"> 
           
           </div>

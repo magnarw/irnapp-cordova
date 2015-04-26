@@ -49,7 +49,7 @@ window.plugin.notification.local.ontrigger = function(id, state, json) {
 
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
   $stateProvider
 
   .state('app', {
@@ -131,6 +131,7 @@ window.plugin.notification.local.ontrigger = function(id, state, json) {
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
+  $ionicConfigProvider.views.transition('none');
 });
 
 

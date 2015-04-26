@@ -2,6 +2,16 @@ img.qibla {
  
 }
 
+.iframe {
+
+	width:100%;
+	height:600px
+
+	    
+}
+
+
+
 .fill-height-or-more {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1123,18 +1133,26 @@ margin: 3px;
 
 }
 
-.icon-home  {
-height :48px;
-width :130px;
- background-color: #252525;
- background-image: url(../icons/ic_logo_new.png);
- background-size: contain;
- -webkit-mask-repeat: no-repeat;
- -webkit-mask-size: 90% 90%;
- margin: 0 auto;
+.icon-home   {
+
+
+	  display: block;
+  width: 100%;
+  height: 100%;
+
+  background-image: url(../icons/drawable-xxhdpi/ic_logo_new.png) ;
+  background-color: transparent;
+	background-repeat: no-repeat;
+	background-size: contain;
+
+	 background-position: center;
  
 
 
+}
+
+.icon-home:active {
+  background-image: url(../icons/drawable-xxhdpi/ic_logo_new_active.png) ;
 }
 
 
