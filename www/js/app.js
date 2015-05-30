@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-var app = angular.module('starter', ['ionic', 'starter.controllers','starter.services','starter.directives','timer','angular-datepicker','ngCordova'])
+var app = angular.module('starter', ['ionic', 'starter.controllers','starter.services','starter.directives','timer','angular-datepicker','angular-gestures','ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -49,7 +49,7 @@ window.plugin.notification.local.ontrigger = function(id, state, json) {
 
 })
 
-.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
+.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider,hammerDefaultOptsProvider) {
   $stateProvider
 
   .state('app', {
@@ -132,6 +132,15 @@ window.plugin.notification.local.ontrigger = function(id, state, json) {
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
   $ionicConfigProvider.views.transition('none');
+
+     hammerDefaultOptsProvider.set({
+        recognizers: [
+          [Hammer.Tap,{ event: 'tap'}],
+          [Hammer.Tap, { event: 'doubletap', taps: 2 }, [], ['tap']],
+         
+          
+        ]
+    });
 });
 
 

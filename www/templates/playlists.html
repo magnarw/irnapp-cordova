@@ -57,7 +57,7 @@
         <div class="timeagin">
            <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
         </div>
-        <div class="alarm" ng-click="setAlarm(playlist)"> <!-- flex container. Used for centering alarm icon-->
+        <div class="alarm" ng-click="ShowAlarmDatePicker(playlist)"> <!-- flex container. Used for centering alarm icon-->
             <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'"  >
 
               </div> 
@@ -71,28 +71,28 @@
             <div class="text">Bønnekalender</div>
           </div>
           
-          <div class="button-irn">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/e-nummer-og-ingredienser', '_self’', 'location=yes'); return false;">
             <div class="icon icon-enr">&nbsp;</div>
             <div class="text">E-nr database</div>
           </div>
           
-          <div class="button-irn">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/produsent-og-produkter', '_self’', 'location=yes'); return false;">
             <div class="icon icon-pro">&nbsp;</div>
             <div class="text">Pro og prod</div>
           </div>
         </div>  
        <div class="button-group app-background" id="header">
-          <div class="button-irn">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/e-nummer-og-ingredienser', '_self’', 'location=yes'); return false;">
             <div class="icon icon-hjiri">&nbsp;</div>
             <div class="text">Hijiri</div>
           </div>
           
-          <div class="button-irn">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/moskeene', '_self’', 'location=yes'); return false;">
             <div class="icon icon-mosque">&nbsp;</div>
             <div class="text">Moskeer</div>
           </div>
           
-          <div class="button-irn">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/butikk-og-servering', '_self’', 'location=yes'); return false;">
             <div class="icon icon-shop">&nbsp;</div>
             <div class="text">Butikk og serv</div>
           </div> 

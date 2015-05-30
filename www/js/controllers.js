@@ -15,8 +15,25 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('HijiriCtrl', function($scope) {
-  // Form data for the login modal
+.controller('HijiriCtrl', function($scope,$sce) {
+
+  $scope.url = $sce.trustAsResourceUrl('http://www.irn.no');
+  
+  console.log('ddf');
+
+  $scope.tapped = function($event) {
+  console.log("dfdf");
+  var ele = $event.target;
+  var x = Math.floor(Math.random() * 200) + 1,
+      y = Math.floor(Math.random() * 100) + 1,
+      z = Math.floor(Math.random() * 6) + 1,
+      rot = Math.floor(Math.random()*360)+1;
+  $(ele).css({
+    'transform': 
+      "translate3d("+x+"px,"+y+"px,"+z+"px)" +
+      "rotate("+rot+"deg)"
+  });
+}
   
 })
 
@@ -137,7 +154,7 @@ $scope.showDatePicker = function () {
 
   
 })
-.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService) {
+.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService, $cordovaToast) {
 
   
   $scope.preyOffset = 5;
@@ -214,6 +231,57 @@ $scope.showDatePicker = function () {
   
   });
   };
+
+
+  $scope.ShowAlarmDatePicker= function (prey) {
+  var options = {
+    date: _getDateFromPrey(prey).toDate(),
+    mode: 'time',
+    minDate:  moment().subtract(100, 'years').toDate(),
+    allowOldDates: true,
+    allowFutureDates: true,
+    doneButtonLabel: 'Sett alarm',
+    doneButtonColor: '#000000',
+    cancelButtonLabel: 'Avbryt',
+    cancelButtonColor: '#000000'
+  };
+
+  $scope.currentAlarm = prey;
+      if($localstorage.hasValue(prey.title)){
+        alarmService.cancelAlarm(prey.title);
+
+        preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+      }else {
+        
+        $cordovaDatePicker.show(options).then(function(date){
+         if(date != undefined){
+            var diffMs = _getDateFromPrey(prey).toDate().getTime()-date.getTime();
+            var preyOffset = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+            alarmService.setAlarm($scope.currentAlarm.title,preyOffset);
+
+          //  $localstorage.set($scope.currentAlarm.title,$scope.preyOffset);
+            preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+
+            if(preyOffset>0){
+              $cordovaToast.showLongBottom('Alarm er satt for ' + prey.title + '. Den vil gå av ' + preyOffset + ' minutter før bønnetid hver dag.').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+            });
+         }else {
+                $cordovaToast.showLongBottom('Alarm er satt for ' + prey.title + '. Den vil gå av ' + (preyOffset*-1) + ' minutter etter bønnetid hver dag.').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+            });
+
+         }
+            }
+      
+      });
+  };
+
+};
 
 
   $scope.setAlarm = function(prey) {

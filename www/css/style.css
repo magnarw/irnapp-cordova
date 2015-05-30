@@ -140,29 +140,133 @@ img.qibla {
 	background: rgb(37, 37, 37);
 }
 
+.menu {
+
+	display:-webkit-box;
+
+	display:-webkit-flex;
+
+	display:-ms-flexbox;
+
+	display:flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+            align-content: stretch;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+}
+
+
 .menu-container {
 
-	width: 100%; 
-	height: 70px; 
+	   -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -webkit-flex-shrink: 0;
+        -ms-flex-negative: 0;
+            flex-shrink: 0;
+    -webkit-flex-basis: 100%;
+        -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+   
+    display:-webkit-box;
+   
+    display:-webkit-flex;
+   
+    display:-ms-flexbox;
+   
+    display:flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+            align-content: stretch;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+
+       background-color:  #252525;
 	  border-bottom: 2px solid  #dedede;
 }
-.menu-container div {
 
-	float: left;
-	height: 70px;
-  	line-height: 50px;
+
+
+
+
+.menu-text:active {
+ background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#252525), to(#ffffff));
 }
 
 .menu-text {
 
-	padding-left: 10px;
+  font-size: large;
+
+  display:-webkit-box;
+
+  display:-webkit-flex;
+
+  display:-ms-flexbox;
+
+  display:flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex-wrap: no-wrap;
+      -ms-flex-wrap:no-wrap;
+          flex-wrap: no-wrap;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+
+  -webkit-align-content: center;
+
+      -ms-flex-line-pack: center;
+
+          align-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color:  white;
+  padding-left: 5%;
+ width: 80%;
 
 }
 
 .menu-icon {
 
-	width: 100%; 
-	height: 30px; 
+	margin: 5%;
+	width: 20%; 
+	background-color: #252525;
 	
 }
 
@@ -212,21 +316,7 @@ background: rgb(37, 37, 37)
 
 
 
-.menu-icon-home  {
-height :50px;
-width :50px;
-  border-bottom: 2px solid  #dedede;
-background-color: #252525;
- background-image: url(../icons/ic_apphome.png);
- background-size: 30px 30px;
- background-position: center;
-  background-repeat: no-repeat;
- -webkit-mask-repeat: no-repeat;
- -webkit-mask-size: 90% 90%;
- 
 
-
-}
 
 .menu-icon-calender  {
 height :50px;
@@ -970,12 +1060,48 @@ background-size: 20px 20px;
 }
 
 
+.menu-button-irn {
 
+background-color: #ffffff;
+padding: 0px;
+text-decoration: none;
+width: 33%;
+margin: 3px;
+
+  display:-webkit-box;
+
+  display:-webkit-flex;
+
+  display:-ms-flexbox;
+
+  display:flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+            align-content: stretch;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+
+}
 
 
 
 .button-irn {
 background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2f593f), to(#242424));
+background-color: #ffffff;
 padding: 0px;
 text-decoration: none;
 width: 33%;
@@ -1156,9 +1282,9 @@ margin: 3px;
 }
 
 
-.button-irn .icon-calender  {
+.icon-calender  {
 
- background-color: #ffffff;
+ 
 	background-image: url(../icons/drawable-xxhdpi/ic_calendar.png) ;
 	background-color: transparent;
 	background-repeat: no-repeat;
@@ -1168,7 +1294,20 @@ margin: 3px;
 }
 
 
-.button-irn .icon-hjiri  {
+.icon-home-av  {
+	background-image: url(../icons/drawable-xxhdpi/ic_apphome.png) ;
+	background-color: transparent;
+	background-repeat: no-repeat;
+ background-position: center;
+	
+ background-size: contain;
+ 
+
+
+}
+
+
+ .icon-hjiri  {
 
 
  background-color: #ffffff;
@@ -1180,7 +1319,7 @@ margin: 3px;
  background-size: contain;
 }
 
-.button-irn .icon-enr {
+.icon-enr {
 
 
  background-color: #ffffff;
@@ -1193,7 +1332,7 @@ margin: 3px;
 
 }
 
-.button-irn  .icon-pro {
+ .icon-pro {
 
 	 background-color: #ffffff;
 	background-image: url(../icons/drawable-xxhdpi/ic_halal.png);
@@ -1205,7 +1344,7 @@ margin: 3px;
 }
 
 
-.button-irn .icon-mosque {
+ .icon-mosque {
 
 	 background-color: #ffffff;
 	background-image: url(../icons/drawable-xxhdpi/ic_mosque.png);
@@ -1217,7 +1356,7 @@ margin: 3px;
 }
 
 
-.button-irn .icon-aboutirn {
+.icon-aboutirn {
 
 		 background-color: #ffffff;
 	background-image: url(../icons/drawable-xxhdpi/ic_irn.png);
@@ -1230,7 +1369,7 @@ margin: 3px;
 
 
 
-.button-irn .icon-settings {
+.icon-settings {
 
 
 	 background-color: #ffffff;
@@ -1243,7 +1382,7 @@ margin: 3px;
 
 }
 
-.button-irn .icon-shop {
+.icon-shop {
 
 	 background-color: #ffffff;
 	background-image: url(../icons/drawable-xxhdpi/ic_shop.png);
@@ -1254,7 +1393,7 @@ margin: 3px;
 
 }
 
-.button-irn .icon-qibla {
+.icon-qibla {
 
 	 background-color: #ffffff;
 	background-image: url(../icons/drawable-xxhdpi/ic_qibla.png);
@@ -1265,7 +1404,7 @@ margin: 3px;
 
 }
 
-.button-irn .icon-halal {
+.icon-halal {
 
 		 background-color: #ffffff;
 	background-image: url(../icons/drawable-xxhdpi/ic_halal.png);
