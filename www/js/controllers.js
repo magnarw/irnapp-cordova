@@ -1,13 +1,12 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$location) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout,$location,$localstorage) {
   // Form data for the login modal
   
   $scope.changeView = function(view){
             $location.path(view); // path not hash
   }
   
-
 
   $scope.differentTapTitle = function(){
 
@@ -18,6 +17,9 @@ angular.module('starter.controllers', [])
 .controller('HijiriCtrl', function($scope,$sce) {
 
   $scope.url = $sce.trustAsResourceUrl('http://www.irn.no');
+
+  $scope.config = {}; // use defaults
+$scope.model = {}; // always pass empty object
   
   console.log('ddf');
 
@@ -37,7 +39,7 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('QiblaCtrl', function($scope) {
+.controller('QiblaCtrl', function($scope,$localstorage) {
   
   $scope.nav = {
       deg: 1
@@ -55,16 +57,24 @@ angular.module('starter.controllers', [])
   };
 
   var options = {
-      frequency: 100
+      frequency: 50
   }; // Update every 3 seconds
 
-  navigator.compass.watchHeading(succ, err, options);
+  if($localstorage.get('watchid') != undefined){
+    navigator.compass.clearWatch($localstorage.get('watchid'));
+  }
+
+  var watchId = navigator.compass.watchHeading(succ, err, options);
+  $localstorage.set('watchid', watchId);
 
 
 
   
 })
-.controller('CalenderCtrl', function($scope,preyTimesService,$cordovaDatePicker) {
+.controller('CalenderCtrl', function($scope,preyTimesService,$cordovaDatePicker,$localstorage) {
+
+
+
   
   $scope.navTitle = '<div class="icon-home"></div>';
 
@@ -92,10 +102,10 @@ $scope.showDatePicker = function () {
     mode: 'date',
     minDate:  moment().subtract(100, 'years').toDate(),
     allowOldDates: true,
-    allowFutureDates: false,
-    doneButtonLabel: 'Done',
+    allowFutureDates: true,
+    doneButtonLabel: 'Velg måned',
     doneButtonColor: '#000000',
-    cancelButtonLabel: 'Abort',
+    cancelButtonLabel: 'Avbryt',
     cancelButtonColor: '#000000'
   };
   
@@ -103,9 +113,9 @@ $scope.showDatePicker = function () {
   $cordovaDatePicker.show(options).then(function(date){
      if(date != undefined){
         $scope.currentPreyDateDisplayed = moment(date);
-        var localStart =  $scope.currentPreyDateDisplayed.startOf('month');
+        var localStart = moment($scope.currentPreyDateDisplayed).startOf('month');
     // Clone the value before .endOf()
-        var localEnd = $scope.currentPreyDateDisplayed.endOf('month');
+        var localEnd = moment($scope.currentPreyDateDisplayed).endOf('month');
         $scope.activeIndex = -1; 
         preyTimesService.getPreyTimesForMonth(localStart.dayOfYear(),localEnd.dayOfYear(), function(data){ $scope.days = data});
      }
@@ -133,9 +143,6 @@ $scope.showDatePicker = function () {
 
 
 
-   $scope.dateChanged = function(){
-    alert("hei");
-   };
 
 
   $scope.isCurrentDay = function(index){
@@ -154,10 +161,12 @@ $scope.showDatePicker = function () {
 
   
 })
-.controller('PlaylistsCtrl', function($scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService, $cordovaToast) {
+.controller('PlaylistsCtrl', function($ionicPlatform, $ionicPlatform, $log, $scope,$ionicModal,preyTimesService,$localstorage,$cordovaDatePicker,alarmService, $cordovaToast,$rootScope) {
 
   
   $scope.preyOffset = 5;
+
+ 
 
   var findActiveAndNextPrey = function (data) {
     $scope.playlists = data;
@@ -174,9 +183,20 @@ $scope.showDatePicker = function () {
 
 
   }
+  var i = 0; 
 
+  $rootScope.$on('resume-mode', function (event, data) {
+  
+  i++;
+  $scope.currentPreyDateDisplayed =  moment(); 
+  $scope.currentPreyDateDisplayed.hours(0);
+  $scope.currentPreyDateDisplayed.seconds(0);
+  $scope.currentPreyDateDisplayed.minutes(0);
+  preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+   today = moment();
+});
 
-    
+  
   $scope.currentPreyDateDisplayed =  moment(); 
   $scope.currentPreyDateDisplayed.hours(0);
   $scope.currentPreyDateDisplayed.seconds(0);
@@ -255,8 +275,8 @@ $scope.showDatePicker = function () {
         
         $cordovaDatePicker.show(options).then(function(date){
          if(date != undefined){
-            var diffMs = _getDateFromPrey(prey).toDate().getTime()-date.getTime();
-            var preyOffset = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+            var diffMs = _getDateFromPrey(prey).toDate()-date;
+            var preyOffset = Math.round(diffMs / 60000);
             alarmService.setAlarm($scope.currentAlarm.title,preyOffset);
 
           //  $localstorage.set($scope.currentAlarm.title,$scope.preyOffset);
@@ -469,9 +489,23 @@ $scope.showDatePicker = function () {
 
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams,$localstorage) {
-}).controller('SettingsController', function($scope,$localstorage) {
-  
+.controller('AboutController', function($scope, $stateParams,$localstorage,$cordovaEmailComposer) {
+  $scope.navTitle = '<div class="icon-home"></div>';
+  $scope.openEpostClient = function(){
+      $cordovaEmailComposer.open(email).then(null, function () {
+   // user cancelled email
+ });
+
+  };
+
+  var email = {
+    to: 'post@irn.no',
+    isHtml: true
+  };
+
+}).controller('SettingsController', function($scope,$localstorage,$cordovaToast) {
+
+ 
   $scope.navTitle = '<div class="icon-home"></div>';
 
   $scope.settings = { 'calendarBasic' : true, 'calenderCity': false ,'city' : 'Oslo','skygge1': false, 'skygge2' : true, 'skygge1by': false, 'skygge2by' : false};
@@ -488,16 +522,35 @@ $scope.showDatePicker = function () {
      }
   }
 
+
   
  
 
     $scope.$watch('settings.city', function(newVal,oldVal) {
+
+      if(newVal != oldVal){
+      $cordovaToast.showLongBottom(newVal +  ' er valgt').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+        });
+    }
+
       $localstorage.setObject('settings',  $scope.settings);
    },true);
 
       $scope.$watch('settings.calendarCity', function(newVal,oldVal) {
 
          if(newVal == true) {
+
+              if(newVal != oldVal){
+      $cordovaToast.showLongBottom($scope.settings.city +  ' er valgt').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+        });
+       }
+
             $scope.settings.calendarBasic = false; 
             $scope.settings.calendarCity = true; 
             $scope.settings.skygge1 = false; 
@@ -516,6 +569,16 @@ $scope.showDatePicker = function () {
    $scope.$watch('settings.skygge1', function(newVal,oldVal) {
 
       if(newVal == true){
+
+                     if(newVal != oldVal){
+      $cordovaToast.showLongBottom('IRN standard Shafi er valgt').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+        });
+       }
+
+
         $scope.settings.calendarBasic = true; 
         $scope.settings.calendarCity = false; 
         $scope.settings.skygge2 = false; 
@@ -534,6 +597,15 @@ $scope.showDatePicker = function () {
 
     $scope.$watch('settings.skygge2', function(newVal,oldVal) {
       if(newVal == true){
+
+                         if(newVal != oldVal){
+      $cordovaToast.showLongBottom('IRN standard Hanafi er valgt').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+        });
+       }
+
         $scope.settings.calendarBasic = true; 
         $scope.settings.calendarCity = false; 
         $scope.settings.skygge1 = false;

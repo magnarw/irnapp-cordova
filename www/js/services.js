@@ -40,7 +40,7 @@ angular.module('starter.services', [])
 
 
     
-	this.getPreyTimesForDay = function(day,renderCallBack){
+    this.getPreyTimesForDay = function(day,renderCallBack){
 
        var settings = $localstorage.getObject('settings');
        var city = "Oslo";
@@ -73,7 +73,7 @@ angular.module('starter.services', [])
               renderCallBack(preyForDay);
 
         });
-	};
+    };
 
 
 
@@ -144,7 +144,7 @@ angular.module('starter.services', [])
 
     };
 
-	
+    
 
    
 }).service('alarmService', function($localstorage,preyTimesService,$cordovaLocalNotification){
@@ -155,22 +155,22 @@ angular.module('starter.services', [])
     var getAlarmIdFromPreyName = function(name){
 
         if(name == 'Fajr'){
-            return "1"; 
+            return 1; 
         }
         if(name == 'Soloppgang'){
-            return "2"; 
+            return 2; 
         }
-         if(name == 'Duhr'){
-            return "3"; 
+         if(name == 'Dhuhr'){
+            return 3; 
         }
          if(name == 'Asr'){
-            return "4"; 
+            return 4; 
         }
          if(name == 'Maghrib'){
-            return "5"; 
+            return 5; 
         }
         if(name == 'Isha'){
-            return "6"; 
+            return 6; 
         }
     };
 
@@ -185,7 +185,7 @@ angular.module('starter.services', [])
             return 'Soloppgang'; 
         }
          if(id == "3" ){
-            return 'Duhr'; 
+            return 'Dhuhr'; 
         }
          if(id == "4" ){
             return 'Asr'; 
@@ -199,12 +199,35 @@ angular.module('starter.services', [])
     };
 
 
+    this.getAlarmIdFromName = function(id){
+
+        if(id == 1){
+            return 'Fajr'; 
+        }
+        if(id == 2){
+            return 'Soloppgang'; 
+        }
+         if(id == 3 ){
+            return 'Dhuhr'; 
+        }
+         if(id == 4 ){
+            return 'Asr'; 
+        }
+         if(id == 5){
+            return 'Maghrib'; 
+        }
+        if(id == 6){
+            return 'Isha'; 
+        }
+    };
+
+
     this.rescheduleAllAcitveAlarms = function(){
 
         $cordovaLocalNotification.getScheduledIds().then(function (scheduledIds) {
             for(var i in scheduledIds){
                   before = $localstorage.get(getPreyNameAlarmId(i));
-                  this.setAlarm(getPreyNameAlarmId(i),before);
+                  this.setAlarm(getPreyNameAlarmId(i),before,false);
             };
         });
   
@@ -219,12 +242,28 @@ angular.module('starter.services', [])
         });
     };
 
+    this.reschuldeAlarm = function(prey){
 
+      if($localstorage.hasValue(prey)){
+        var value =  $localstorage.get(prey);
+       
+        this.setAlarm(prey,value,true);
+      };
 
-    this.setAlarm = function(prey, before){
+    };
+
+    this.setAlarm = function(prey, before,nextDay){
         var preyIndex = getAlarmIdFromPreyName(prey);
         $localstorage.set(prey,before);
-        preyTimesService.getPreyTimesForDay(moment().dayOfYear(), function(data){
+
+        var dayOfYear = moment().dayOfYear();
+        if(nextDay)
+          dayOfYear++; 
+        if(nextDay && dayOfYear>365)
+          dayOfYear = 1; 
+       
+
+        preyTimesService.getPreyTimesForDay(dayOfYear, function(data){
 
             var prey = data[preyIndex-1];
             var date = moment();
@@ -232,6 +271,13 @@ angular.module('starter.services', [])
             date = date.hours(res[0]);
             date = date.minutes(res[1]);
             date = date.add(-before, 'm');
+
+            if(date<moment() || nextDay){
+               date = date.add(1, 'd');
+            }
+
+
+
         $cordovaLocalNotification.add({
             id: preyIndex,
             firstAt: date.toDate(),

@@ -9,7 +9,48 @@ img.qibla {
 
 	    
 }
+.container2 {
+    width: 100%;
+    height: 500px;
 
+    background-image: url(../icons/ic_compass.png) ;
+  background-color: transparent;
+  background-repeat: no-repeat;
+ background-position: center;
+  
+ background-size: contain;
+
+
+}
+
+.arrow {
+    width: 100%;
+    height: 500px;
+
+    background-image: url(../icons/ic_compass_arrow.png) ;
+    transform: rotate(49deg) ;
+  background-color: transparent;
+  background-repeat: no-repeat;
+ background-position: center;
+  
+ background-size: contain;
+
+}
+.image {
+    position: absolute;
+   
+    border: 1px solid red;
+}
+
+.imageOne {
+    z-index: 0;
+}
+
+.imageTwo {
+    z-index: 1;
+     transform-origin: left;
+    transform: translate(-5%, 5%) rotate(90deg) ;
+}
 
 
 .fill-height-or-more {
@@ -25,6 +66,27 @@ img.qibla {
 
   
   height:100%;
+}
+
+.call-flex-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+
+  
+  height:80px;
+}
+
+.flexcontainer{
+
+
+
 }
 
 
@@ -68,6 +130,84 @@ img.qibla {
 
 }
 
+.callnavigation {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -webkit-flex-shrink: 1;
+      -ms-flex-negative: 1;
+          flex-shrink: 1;
+  -webkit-flex-basis:10%;
+      -ms-flex-preferred-size:10%;
+          flex-basis:70%;
+    font-size: medium;
+  background-color: black;
+  padding: 5px;
+  display:-webkit-box;
+  display:-webkit-flex;
+  display:-ms-flexbox;
+  display:flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+            align-content: stretch;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+
+}
+
+.callnavigation > div
+
+{
+
+  display:-webkit-box;
+
+  display:-webkit-flex;
+
+  display:-ms-flexbox;
+
+  display:flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex-wrap: no-wrap;
+      -ms-flex-wrap: no-wrap;
+          flex-wrap: no-wrap;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+
+  -webkit-align-content: center;
+
+      -ms-flex-line-pack: center;
+
+          align-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+
+
+
+
+}
 .preynavigation > div {
 
   display:-webkit-box;
@@ -274,6 +414,7 @@ img.qibla {
 	width: 100%;
 	height: auto;
    opacity: 0.6;
+   font-size: small;
   	 background-color: black;
   	color: white;
   	text-align: center;
@@ -284,16 +425,22 @@ vertical-align: middle;
 
 #la {
 	width: 100%;
-	height: 70px;
+	height: 130px;
     background-image: url(../icons/irnmap2.png);
 background-size: 100% auto;
 }
 
-border-color: #b2b2b2;
-background-color: #252525;
-background-image: -webkit-linear-gradient(90deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
-background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
-color: #444;
+.irn-icon{   
+  height: 100px;
+  background-image:  url(../icons/irnlogo_cropped.png);
+    background-size:   contain;                      /* <------ */
+    background-repeat: no-repeat;
+    background-position: center center; 
+
+}
+
+  
+
 
 
 #image
@@ -1099,6 +1246,11 @@ margin: 3px;
 
 
 
+.jall {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2f593f), to(#242424)) !important;
+  color: white !important;
+}
+
 .button-irn {
 background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2f593f), to(#242424));
 background-color: #ffffff;
@@ -1354,6 +1506,19 @@ margin: 3px;
   background-size: contain;
 
 }
+
+
+ .icon-apphome {
+
+   background-color: #ffffff;
+  background-image: url(../icons/ic_apphome.png);
+  background-color: transparent;
+  background-repeat: no-repeat;
+ background-position: center;
+  background-size: contain;
+
+}
+
 
 
 .icon-aboutirn {

@@ -9,21 +9,24 @@
 
  
   <ion-header-bar class="bar-light bar-subheader">
-    <div class="preynavigation">
-          <div class="nav-left hackinghight" ng-click="prevDay()">
-            <div class="nav-left-icon" ng-click="prevDay()">
+
+  <div class="call-flex-wrapper">
+    
+          <div class="callnavigation">
+            <div class="nav-left" ng-click="prevDay()">
+              <div class="nav-left-icon">
+              </div>
             </div>
-          </div>
-          <div class="nav-center-input hackinghight">
-          <input value="{{currentPreyDateDisplayed.format('MMMM YYYY')}}"  ng-click="showDatePicker()" type="button"  />
-        </div>
-          <div class="nav-right hackinghight" ng-click="nextDay()">
-            <div class="nav-right-icon" ng-click="nextDay()">
+             <div class="nav-center" ng-click="showDatePicker()">
+               {{currentPreyDateDisplayed.format('MMMM YYYY')}}
             </div>
-          </div>
-          
+            <div class="nav-right" ng-click="nextDay()">
+              <div class="nav-right-icon">
+              </div>
+            </div>
         </div>
-         <div class="row app-background header-cal" id="header">
+     
+      <div class="row app-background header-cal" id="header">
          
            <div class="clander-item-day-nav">
                Dag
@@ -47,7 +50,8 @@
              Isha
             </div>
 
-        </div>     
+        </div> 
+    </div>    
   </ion-header-bar>
 
   <ion-content scroll="true" class="top">

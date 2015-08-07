@@ -5,35 +5,89 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-var app = angular.module('starter', ['ionic', 'starter.controllers','starter.services','starter.directives','timer','angular-datepicker','angular-gestures','ngCordova'])
+var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','starter.services','starter.directives','timer','angular-datepicker','angular-gestures','ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$cordovaToast,$rootScope,alarmService,$ionicPopup,$localstorage) {
+
+ 
+
+ var globalClose = false; 
+
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
 
 
-cordova.plugins.notification.local.registerPermission(function (granted) {
-    // console.log('Permission has been granted: ' + granted);
-});
-  
-  console.log(navigator.compass);
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
+    $rootScope.$on("$locationChangeStart", function(event){
+    if($localstorage.get('watchid') != undefined){
+    navigator.compass.clearWatch($localstorage.get('watchid'));
+  }
+})
 
 
-window.plugin.notification.local.ontrigger = function(id, state, json) {
-  $timeout(function() {
-    console.log('triggered');
-    $rootScope.$broadcast('onTrigger', id, state, json);
-  }, 100);
-};
+document.addEventListener("resume", function(){
+    
 
+       $rootScope.$broadcast('resume-mode', {
+      someProp: 'Sending you an Object!' // send whatever you want
+    });
+
+ cordova.plugins.notification.local.on("click", function (notification) {
+       
+        
+
+      var name = alarmService.getAlarmIdFromName(notification.id);
+      alarmService.reschuldeAlarm(name);
+        if(globalClose == false){
+             globalClose = true; 
+
+            var alertPopup = $ionicPopup.alert({
+             title: 'Tid for bønn!',
+             template: 'Det er tid for ' + name
+           });
+
+        }
+      
+       alertPopup.then(function(res) {
+        globalClose = false; 
+         console.log('Thank you for not eating my delicious ice cream cone');
+       });
+
+
+    });
+
+
+
+           // Notification has reached its trigger time (Tomorrow at 8:45 AM)
+    cordova.plugins.notification.local.on("trigger", function (notification) {
+        
+         var name = alarmService.getAlarmIdFromName(notification.id);
+         if(globalClose == false){
+             globalClose = true; 
+
+            var alertPopup = $ionicPopup.alert({
+             title: 'Tid for bønn!',
+             template: 'Det er tid for ' + name
+           });
+
+        }
+       alertPopup.then(function(res) {
+        globalClose = false; 
+         console.log('Thank you for not eating my delicious ice cream cone');
+       });
+
+       
+        alarmService.reschuldeAlarm(name);
+        
+        
+
+        
+    });
+
+       
+   
+}, false);
+
+
+   
 
 
  
@@ -99,7 +153,8 @@ window.plugin.notification.local.ontrigger = function(id, state, json) {
     url: "/aboutirn",
     views: {
       'menuContent': {
-        templateUrl: "templates/aboutirn.html"
+        templateUrl: "templates/aboutirn.html",
+         controller: 'AboutController'
       }
     }
   }).state('app.playlists', {

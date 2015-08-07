@@ -7,11 +7,12 @@
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="lib/angular-pan-zoom/panzoomwidget.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
-
+ 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/angular-timer/dist/angular-timer.js"></script>
@@ -20,19 +21,29 @@
     <script src="lib/angular-gestures/gestures.js"></script>
     <script src="lib/angular-native-picker/build/angular-datepicker.js"></script>
 
+
+
+<script src="lib/jQuery/dist/jQuery.js"></script>
+  <script src="lib/hamsterjs/hamster.js"></script>
+
+  <script src="lib/angular-mousewheel/mousewheel.js"></script>
+  <script src="lib/angular-pan-zoom/release/panzoom.js"></script>
+
     <!-- plugins -->
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+  
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
     <script src="js/directives.js"></script>
+
   </head>
 
   <body ng-app="starter">
     <ion-nav-view></ion-nav-view>
+    <script src="cordova.js"></script>
   </body>
 </html>
