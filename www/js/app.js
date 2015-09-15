@@ -16,11 +16,25 @@ var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','s
   $ionicPlatform.ready(function() {
 
 
+
+
+
     $rootScope.$on("$locationChangeStart", function(event){
     if($localstorage.get('watchid') != undefined){
     navigator.compass.clearWatch($localstorage.get('watchid'));
   }
-})
+  });
+  $rootScope.$on("$locationChangeSuccess", function(event){
+     $rootScope.$broadcast('resume-mode', {
+      someProp: 'Sending you an Object!' // send whatever you want
+    });
+  
+  });
+
+
+
+
+
 
 
 document.addEventListener("resume", function(){
@@ -104,9 +118,8 @@ document.addEventListener("resume", function(){
 })
 
 .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider,hammerDefaultOptsProvider) {
-  $stateProvider
-
-  .state('app', {
+  $ionicConfigProvider.views.swipeBackEnabled(false);
+  $stateProvider.state('app', {
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",

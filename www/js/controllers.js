@@ -235,9 +235,9 @@ $scope.showDatePicker = function () {
     minDate:  moment().subtract(100, 'years').toDate(),
     allowOldDates: true,
     allowFutureDates: true,
-    doneButtonLabel: 'Done',
+    doneButtonLabel: 'Velg dag',
     doneButtonColor: '#000000',
-    cancelButtonLabel: 'Abort',
+    cancelButtonLabel: 'Avbryt',
     cancelButtonColor: '#000000'
   };
   
@@ -490,7 +490,7 @@ $scope.showDatePicker = function () {
 })
 
 .controller('AboutController', function($scope, $stateParams,$localstorage,$cordovaEmailComposer) {
-  $scope.navTitle = '<div class="icon-home"></div>';
+  $scope.navTitle = '<div class="icon-home" ng-click="differentTapTitle()"></div>';
   $scope.openEpostClient = function(){
       $cordovaEmailComposer.open(email).then(null, function () {
    // user cancelled email
@@ -506,7 +506,7 @@ $scope.showDatePicker = function () {
 }).controller('SettingsController', function($scope,$localstorage,$cordovaToast) {
 
  
-  $scope.navTitle = '<div class="icon-home"></div>';
+ $scope.navTitle = '<div class="icon-home" ng-click="differentTapTitle()"></div>';
 
   $scope.settings = { 'calendarBasic' : true, 'calenderCity': false ,'city' : 'Oslo','skygge1': false, 'skygge2' : true, 'skygge1by': false, 'skygge2by' : false};
 

@@ -138,8 +138,13 @@ angular.module('starter.services', [])
         {
             hourPart = hourPart +12;
         }
+        if(hourPart<10){
+          return "0" + hourPart + ":" + array2[1];
+        }else {
+          return hourPart + ":" + array2[1];
+        }
 
-        return hourPart + ":" + array2[1];
+        
         
 
     };
