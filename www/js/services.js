@@ -51,7 +51,7 @@ angular.module('starter.services', [])
        $http.get('preytimes/'+city+'.js').success(function(data) {
           
             if(settings!=null){
-            if(settings.city!=null){
+            if(settings.calendarCity==true){
                 skygge2 = settings.skygge2by;
             }else {
                 skygge2 = settings.skygge2;
@@ -90,9 +90,9 @@ angular.module('starter.services', [])
           
             if(settings!=null){
             if(settings.city!=null){
-                skygge2 = !settings.skygge2by;
+                skygge2 = settings.skygge2by;
             }else {
-                skygge2 = !settings.skygge2;
+                skygge2 = settings.skygge2;
             } 
             }
            
@@ -228,13 +228,23 @@ angular.module('starter.services', [])
 
 
     this.rescheduleAllAcitveAlarms = function(){
-
-        $cordovaLocalNotification.getScheduledIds().then(function (scheduledIds) {
+        console.log('Trying to scheduled all active alarms');
+        var scheduledIds = ['1','2','3','4','5','6'];
+            console.log("scheduledIds:" + scheduledIds);
             for(var i in scheduledIds){
-                  before = $localstorage.get(getPreyNameAlarmId(i));
-                  this.setAlarm(getPreyNameAlarmId(i),before,false);
+
+               
+                      // console.log('Notification with ID ' + id + ' is scheduled: ' + isScheduled);
+                    if($localstorage.get(getPreyNameAlarmId(i))!=undefined && $localstorage.get(getPreyNameAlarmId(i)) !=false ){
+                       console.log('Alarmid:' + getPreyNameAlarmId(i));
+                      before = $localstorage.get(getPreyNameAlarmId(i));
+                      this.setAlarm(getPreyNameAlarmId(i),before,false);
+                    }
+                 
+
+                 
             };
-        });
+      
   
     };
 
@@ -283,13 +293,13 @@ angular.module('starter.services', [])
 
 
 
-        $cordovaLocalNotification.add({
+        cordova.plugins.notification.local.schedule({
             id: preyIndex,
-            firstAt: date.toDate(),
-            message: "Det er tid for " + getPreyNameAlarmId(preyIndex),
+            at: date.toDate(),
+            text: "Det er tid for " + getPreyNameAlarmId(preyIndex),
             title: "Det er tid for bønn!",
             every: "day",
-            autoCancel: false
+            autoClear: false
         }).then(function () {
             console.log("The notification has been set");
         });

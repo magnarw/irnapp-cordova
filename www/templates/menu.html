@@ -11,7 +11,7 @@
     
     <ion-content scroll="false" >
       <div class="menu">
-      <div class="menu-container" menu-close ng-click="changeView('/app/playlist')">
+      <div class="menu-container" menu-close ng-click="changeView('app.playlists')">
           <div class="menu-icon icon-apphome"> 
           
           </div>
@@ -19,18 +19,18 @@
               Hjem
           </div>
       </div> 
-      <div class="menu-container" ng-click="changeView('/app/calender')" menu-close>
+      <div class="menu-container" ng-click="changeView('app.calender')" menu-close>
           
         
           <div class="menu-icon icon-calender"> 
             
           </div>
 
-          <div class="menu-text" ng-click="changeView('/app/calender')">
+          <div class="menu-text">
               Månedestabell
           </div>
       </div>
-      <div class="menu-container" onclick="window.open('http://www.irn.no/e-nummer-og-ingredienser', '_self’', 'location=yes'); return false;">
+      <div class="menu-container" onclick="window.open('http://www.irn.no/e-nummer-database', '_system', 'location=yes'); return false;">
           <div class="menu-icon icon-enr"> 
           
           </div>
@@ -38,7 +38,7 @@
               Enr database
           </div>
       </div> 
-      <div class="menu-container" onclick="window.open('http://www.irn.no/produsent-og-produkter', '_self’', 'location=yes'); return false;">
+      <div class="menu-container" onclick="window.open('http://www.irn.no/produsent-og-produkter', '_system', 'location=yes'); return false;">
           <div class="menu-icon icon-pro"> 
           
           </div>
@@ -46,7 +46,8 @@
              Produsent og produkt
           </div>
       </div>
-      <div class="menu-container" onclick="window.open('http://www.irn.no/butikk-og-servering', '_self’', 'location=yes'); return false;">
+
+      <div class="menu-container" onclick="window.open('http://www.irn.no/butikk-og-servering', '_system', 'location=yes'); return false;">
           <div class="menu-icon icon-shop"> 
           
           </div>
@@ -54,7 +55,7 @@
             Butikk og servering
           </div>
       </div>
-      <div class="menu-container" menu-close ng-click="changeView('/app/hijiri')">
+      <div class="menu-container" menu-close onclick="window.open('http://www.irn.no/islamsk-kalender', '_system', 'location=yes'); return false;">
           <div class="menu-icon icon-hjiri"> 
           
           </div>
@@ -62,7 +63,8 @@
             Hijri
           </div>
       </div>
-      <div class="menu-container" menu-close onclick="window.open('http://www.irn.no/moskeene', '_self’', 'location=yes'); return false;">
+      
+      <div class="menu-container" menu-close onclick="window.open('http://www.irn.no/moskeene', '_system', 'location=yes'); return false;">
           <div class="menu-icon icon-mosque"> 
           
           </div>
@@ -70,7 +72,7 @@
             Moskeer
           </div>
       </div>
-      <div class="menu-container" menu-close ng-click="changeView('/app/qibla')">
+      <div class="menu-container" menu-close ng-click="changeView('app.qibla')">
           <div class="menu-icon icon-qibla"> 
           
           </div>
@@ -78,7 +80,7 @@
             Qibla
           </div>
       </div>
-       <div class="menu-container" menu-close ng-click="changeView('/app/aboutirn')">
+       <div class="menu-container" ng-click="changeView('app.aboutirn')">
           <div class="menu-icon icon-aboutirn"> 
           
           </div>
@@ -86,7 +88,7 @@
            Om IRN
           </div>
       </div>
-        <div class="menu-container" menu-close ng-click="changeView('/app/settings')">
+        <div class="menu-container" ng-click="changeView('app.settings')">
           <div class="menu-icon icon-settings"> 
           
           </div>

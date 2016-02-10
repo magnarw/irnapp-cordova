@@ -5,7 +5,48 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','starter.services','starter.directives','timer','angular-datepicker','angular-gestures','ngCordova'])
+
+angular.module('ngIOS9UIWebViewPatch', ['ng']).config(['$provide', function($provide) {
+  'use strict';
+
+  $provide.decorator('$browser', ['$delegate', '$window', function($delegate, $window) {
+
+    if (isIOS9UIWebView($window.navigator.userAgent)) {
+      return applyIOS9Shim($delegate);
+    }
+
+    return $delegate;
+
+    function isIOS9UIWebView(userAgent) {
+      return /(iPhone|iPad|iPod).* OS 9_\d/.test(userAgent) && !/Version\/9\./.test(userAgent);
+    }
+
+    function applyIOS9Shim(browser) {
+      var pendingLocationUrl = null;
+      var originalUrlFn= browser.url;
+
+      browser.url = function() {
+        if (arguments.length) {
+          pendingLocationUrl = arguments[0];
+          return originalUrlFn.apply(browser, arguments);
+        }
+
+        return pendingLocationUrl || originalUrlFn.apply(browser, arguments);
+      };
+
+      window.addEventListener('popstate', clearPendingLocationUrl, false);
+      window.addEventListener('hashchange', clearPendingLocationUrl, false);
+
+      function clearPendingLocationUrl() {
+        pendingLocationUrl = null;
+      }
+
+      return browser;
+    }
+  }]);
+}]);
+
+var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','starter.services','starter.directives','timer','angular-datepicker','angular-gestures','ngCordova','ngIOS9UIWebViewPatch'])
 
 .run(function($ionicPlatform,$cordovaToast,$rootScope,alarmService,$ionicPopup,$localstorage) {
 
@@ -13,23 +54,44 @@ var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','s
 
  var globalClose = false; 
 
-  $ionicPlatform.ready(function() {
+ window.ionic.Platform.ready(function() {
 
 
 
 
 
-    $rootScope.$on("$locationChangeStart", function(event){
-    if($localstorage.get('watchid') != undefined){
-    navigator.compass.clearWatch($localstorage.get('watchid'));
-  }
-  });
-  $rootScope.$on("$locationChangeSuccess", function(event){
-     $rootScope.$broadcast('resume-mode', {
-      someProp: 'Sending you an Object!' // send whatever you want
-    });
+    
   
-  });
+
+cordova.plugins.notification.local.hasPermission(function(granted) {
+  if (!granted)
+    cordova.plugins.notification.local.promptForPermission();
+});
+
+
+
+
+cordova.plugins.notification.local.on("trigger", function(notification) {
+
+  console.log("alarm triggered");
+    var name = alarmService.getAlarmIdFromName(notification.id);
+         if(globalClose == false){
+             globalClose = true; 
+
+            var alertPopup = $ionicPopup.alert({
+             title: 'Tid for bønn!',
+             template: 'Det er tid for ' + name
+           });
+
+        }
+       alertPopup.then(function(res) {
+        globalClose = false; 
+         console.log('Thank you for not eating my delicious ice cream cone');
+       });
+
+       
+      alarmService.reschuldeAlarm(name);
+});
 
 
 
@@ -43,6 +105,8 @@ document.addEventListener("resume", function(){
        $rootScope.$broadcast('resume-mode', {
       someProp: 'Sending you an Object!' // send whatever you want
     });
+
+ alarmService.rescheduleAllAcitveAlarms();
 
  cordova.plugins.notification.local.on("click", function (notification) {
        
@@ -201,14 +265,7 @@ document.addEventListener("resume", function(){
   $urlRouterProvider.otherwise('/app/playlists');
   $ionicConfigProvider.views.transition('none');
 
-     hammerDefaultOptsProvider.set({
-        recognizers: [
-          [Hammer.Tap,{ event: 'tap'}],
-          [Hammer.Tap, { event: 'doubletap', taps: 2 }, [], ['tap']],
-         
-          
-        ]
-    });
+    
 });
 
 

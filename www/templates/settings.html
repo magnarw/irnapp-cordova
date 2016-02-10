@@ -8,9 +8,12 @@
  
   <ion-content scroll="false" >
    
-    <ion-checkbox ng-model="settings.skygge2">IRN standard Hanafi (Asr 2xskygge)</ion-checkbox>
-    <ion-checkbox ng-model="settings.skygge1">IRN standard Shafi (Asr 1xskygge)</ion-checkbox>
-    <ion-checkbox ng-model="settings.calendarCity" >Velg by</ion-checkbox>
+    <ion-checkbox style="
+    font-size: 14px;" ng-model="settings.skygge2">IRN standard Hanafi (Asr 2xskygge)</ion-checkbox>
+    <ion-checkbox style="
+    font-size: 14px;" ng-model="settings.skygge1">IRN standard Shafi (Asr 1xskygge)</ion-checkbox>
+    <ion-checkbox style="
+    font-size: 14px;" ng-model="settings.calendarCity" >Velg by</ion-checkbox>
   	<div class="list">
     <div ng-if="settings.calendarCity">
     <label class="item item-input item-select">
@@ -96,8 +99,10 @@
 <option>Vossevangen</option>
       </select>
     </label>
-    <ion-checkbox ng-model="settings.skygge2by">Asr 2xskygge</ion-checkbox>
-    <ion-checkbox ng-model="settings.skygge1by">Asr 1xskygge</ion-checkbox>
+    <ion-checkbox style="
+    font-size: 14px;" ng-model="settings.skygge2by">Hanafi</ion-checkbox>
+    <ion-checkbox style="
+    font-size: 14px;" ng-model="settings.skygge1by">Shafi</ion-checkbox>
   </div>
 
 

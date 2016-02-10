@@ -2,6 +2,25 @@ img.qibla {
  
 }
 
+.push {
+
+  margin-top: 15px;
+}
+
+.platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
+  margin-top: 20px;
+}
+.platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
+  height: 80px;
+}
+.platform-ios.platform-cordova:not(.fullscreen) .has-header {
+  top: 80px;
+}
+
+.bar.bar-stable {
+    background: rgb(21, 20, 20);
+}
+
 .iframe {
 
 	width:100%;
@@ -9,9 +28,25 @@ img.qibla {
 
 	    
 }
+
+.bar .title {
+ height: 60px;
+}
+/*
+.bar.bar-stable {
+    height: 60px !important;
+}
+
+.bar .title {
+ height: 50px;
+}
+
+.has-header {
+  top: 60px; }
+*/
 .container2 {
     width: 100%;
-    height: 500px;
+    height: 350px;
 
     background-image: url(../icons/ic_compass.png) ;
   background-color: transparent;
@@ -25,7 +60,7 @@ img.qibla {
 
 .arrow {
     width: 100%;
-    height: 500px;
+    height: 350px;
 
     background-image: url(../icons/ic_compass_arrow.png) ;
     transform: rotate(49deg) ;
@@ -79,8 +114,8 @@ img.qibla {
       -ms-flex-direction: column;
           flex-direction: column;
 
-  
-  height:80px;
+  top: 44px;
+  height:60px;
 }
 
 .flexcontainer{
@@ -275,13 +310,11 @@ img.qibla {
 	z-index: 30;
 }
 
-.bar.bar-stable {
 
-	background: rgb(37, 37, 37);
-}
 
 .menu {
 
+padding-top : 6%;
 	display:-webkit-box;
 
 	display:-webkit-flex;
@@ -1249,6 +1282,7 @@ margin: 3px;
 .jall {
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2f593f), to(#242424)) !important;
   color: white !important;
+  height: 50px;
 }
 
 .button-irn {
@@ -1393,7 +1427,7 @@ margin: 3px;
 }
 
 .button-irn .icon  {
-
+margin-top:  5px;
 	-webkit-box-flex: 1;
 
 	-webkit-flex-grow: 1;

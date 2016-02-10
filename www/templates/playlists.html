@@ -2,7 +2,7 @@
 <ion-nav-title  ng-click="differentTapTitle()" class="icon-home" >
  
 </ion-nav-title>
-  <ion-nav-buttons class="bar-header bar-dark" side="left">
+  <ion-nav-buttons class="mynavbar bar-header bar-dark" side="left">
     <button menu-toggle="left" class="jall button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
 
@@ -17,7 +17,7 @@
               </div>
             </div>
              <div class="nav-center" ng-click="showDatePicker()">
-                {{currentPreyDateDisplayed.format('D MMMM YYYY')}}
+                {{currentPreyDateDisplayed.format('dddd D.M.YYYY')}}
             </div>
             <div class="nav-right" ng-click="nextDay()">
               <div class="nav-right-icon">
@@ -57,42 +57,45 @@
         <div class="timeagin">
            <timer ng-if="playlist.isNext" countdown="playlist.countDown" max-time-unit="'hour'" interval="1000">{{hours}}:{{mminutes}}:{{sseconds}}</timer>
         </div>
-        <div class="alarm" ng-click="ShowAlarmDatePicker(playlist)"> <!-- flex container. Used for centering alarm icon-->
+        <div class="alarm" ng-if="playlist.title!='Soloppgang'"ng-click="ShowAlarmDatePicker(playlist)"> <!-- flex container. Used for centering alarm icon-->
             <div ng-class="playlist.hasAlarm ? 'alarm-active-box' : 'alarm-box'"  >
 
               </div> 
+        </div>
+        <div class="alarm" ng-if="playlist.title=='Soloppgang'"> <!-- flex container. Used for centering alarm icon-->
+            
         </div>
       </div>    
       </div>
         <div class="shortcutcontainer">  <!-- Flex item: Takes up 40% of parent. Also flex container.  -->
         <div class="button-group app-background">  
-          <div class="button-irn" ng-click="changeView('/app/calender')">
+          <div class="button-irn" ng-click="changeView('app.calender')">
             <div class="icon icon-calender">&nbsp;</div>
-            <div class="text">Bønnekalender</div>
+            <div class="text">Månedestabell</div>
           </div>
           
-          <div class="button-irn" onclick="window.open('http://www.irn.no/e-nummer-og-ingredienser', '_self’', 'location=yes'); return false;">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/e-nummer-database', '_system', 'location=yes'); return false;">
             <div class="icon icon-enr">&nbsp;</div>
             <div class="text">E-nr database</div>
           </div>
           
-          <div class="button-irn" onclick="window.open('http://www.irn.no/produsent-og-produkter', '_self’', 'location=yes'); return false;">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/produsent-og-produkter', '_system', 'location=yes'); return false;">
             <div class="icon icon-pro">&nbsp;</div>
             <div class="text">Pro og prod</div>
           </div>
         </div>  
        <div class="button-group app-background" id="header">
-          <div class="button-irn" onclick="window.open('http://www.irn.no/e-nummer-og-ingredienser', '_self’', 'location=yes'); return false;">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/islamsk-kalender', '_system', 'location=yes'); return false;">
             <div class="icon icon-hjiri">&nbsp;</div>
             <div class="text">Hijiri</div>
           </div>
           
-          <div class="button-irn" onclick="window.open('http://www.irn.no/moskeene', '_self’', 'location=yes'); return false;">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/moskeene', '_system', 'location=yes'); return false;">
             <div class="icon icon-mosque">&nbsp;</div>
             <div class="text">Moskeer</div>
           </div>
           
-          <div class="button-irn" onclick="window.open('http://www.irn.no/butikk-og-servering', '_self’', 'location=yes'); return false;">
+          <div class="button-irn" onclick="window.open('http://www.irn.no/butikk-og-servering', '_system', 'location=yes'); return false;">
             <div class="icon icon-shop">&nbsp;</div>
             <div class="text">Butikk og serv</div>
           </div> 
@@ -100,17 +103,17 @@
 
          <div class="button-group app-background" id="header">
         
-          <div class="button-irn" ng-click="changeView('/app/qibla')">
+          <div class="button-irn" ng-click="changeView('app.qibla')">
             <div class="icon icon-qibla">&nbsp;</div>
             <div class="text">Qibla</div>
           </div>
           
-          <div class="button-irn" ng-click="changeView('/app/aboutirn')">
+          <div class="button-irn" ng-click="changeView('app.aboutirn')">
             <div class="icon icon-aboutirn">&nbsp;</div>
             <div class="text">Om IRN</div>
           </div>
           
-          <div class="button-irn" ng-click="changeView('/app/settings')">
+          <div class="button-irn" ng-click="changeView('app.settings')">
             <div class="icon icon-settings">&nbsp;</div>
             <div class="text">Innstillinger</div>
           </div>

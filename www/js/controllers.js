@@ -1,16 +1,32 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$location,$localstorage) {
+.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $timeout,$location,$localstorage,$ionicSideMenuDelegate,$rootScope,$state) {
   // Form data for the login modal
   
   $scope.changeView = function(view){
-            $location.path(view); // path not hash
+    if($localstorage.hasValue("watchid")) {
+  navigator.compass.clearWatch($localstorage.get("watchid"));
+
+
+} 
+
+  
+$localstorage.set("watchid", "false");
+    $ionicSideMenuDelegate.toggleLeft(false);
+    console.log('This is the view:' + view);
+            $state.go(view);
+            //$location.path(view); // path not hash
   }
   
 
   $scope.differentTapTitle = function(){
+  
 
-    $scope.changeView("/app/playlists");
+    $scope.changeView('app.playlists');
+      $rootScope.$broadcast('homebuttonclicked', {
+      someProp: 'Sending you an Object!' // send whatever you want
+    });
+
   }
 })
 
@@ -39,40 +55,48 @@ $scope.model = {}; // always pass empty object
   
 })
 
-.controller('QiblaCtrl', function($scope,$localstorage) {
-  
+.controller('QiblaCtrl', function($scope,$localstorage,$rootScope) {
   $scope.nav = {
       deg: 1
   }
-
-
+  var enter = true; 
+  var watchID = null; 
   var succ = function(heading) {
-    $scope.nav.deg = heading.magneticHeading;
-    console.log("scope heading:" + $scope.nav.deg)
+    console.log("Postion:" + heading.magneticHeading);
+    $scope.nav.deg = - heading.magneticHeading;
+   
     $scope.$apply();
   };
-
   var err = function(error) {
-   
+   console.log("Error:" + error.code);
   };
+  //var watchId = navigator.geolocation.watchPosition(succ,err,{ maximumAge: 30000, timeout: 50000, enableHighAccuracy: false });
+var options = {
+    frequency: 30
+}; // Update every 3 seconds
+  
+if($localstorage.hasValue("watchid")) {
+  navigator.compass.clearWatch($localstorage.get("watchid"));
+} 
+    
+      
 
-  var options = {
-      frequency: 50
-  }; // Update every 3 seconds
+watchID = navigator.compass.watchHeading(succ, err, options);
+$localstorage.set("watchid", watchID);
 
-  if($localstorage.get('watchid') != undefined){
-    navigator.compass.clearWatch($localstorage.get('watchid'));
-  }
+enter = false; 
+ 
+  
+  
 
-  var watchId = navigator.compass.watchHeading(succ, err, options);
-  $localstorage.set('watchid', watchId);
+
+
 
 
 
   
 })
-.controller('CalenderCtrl', function($scope,preyTimesService,$cordovaDatePicker,$localstorage) {
-
+.controller('CalenderCtrl', function($scope,preyTimesService,$cordovaDatePicker,$localstorage,$rootScope) {
 
 
   
@@ -96,6 +120,24 @@ $scope.example = {
 
 
   }; 
+
+ $rootScope.$on('homebuttonclicked', function (event, data) {
+ 
+$scope.currentPreyDateDisplayed =  moment(); 
+  var start =  moment($scope.currentPreyDateDisplayed).startOf('month');
+    // Clone the value before .endOf()
+  var end  =moment($scope.currentPreyDateDisplayed).endOf('month');
+
+$scope.example = {
+       value: new Date(2013, 9, 1)
+     };
+
+  preyTimesService.getPreyTimesForMonth(start.dayOfYear(),end.dayOfYear(), function(data){ $scope.days = data});
+
+  $scope.activeIndex = $scope.currentPreyDateDisplayed.date()-1;
+});
+
+
 $scope.showDatePicker = function () {
   var options = {
     date: new Date(),
@@ -103,6 +145,7 @@ $scope.showDatePicker = function () {
     minDate:  moment().subtract(100, 'years').toDate(),
     allowOldDates: true,
     allowFutureDates: true,
+     locale: "NO",
     doneButtonLabel: 'Velg måned',
     doneButtonColor: '#000000',
     cancelButtonLabel: 'Avbryt',
@@ -186,7 +229,7 @@ $scope.showDatePicker = function () {
   var i = 0; 
 
   $rootScope.$on('resume-mode', function (event, data) {
-  
+ 
   i++;
   $scope.currentPreyDateDisplayed =  moment(); 
   $scope.currentPreyDateDisplayed.hours(0);
@@ -196,6 +239,23 @@ $scope.showDatePicker = function () {
    today = moment();
 });
 
+  $rootScope.$on('homebuttonclicked', function (event, data) {
+ 
+  i++;
+  $scope.currentPreyDateDisplayed =  moment(); 
+  $scope.currentPreyDateDisplayed.hours(0);
+  $scope.currentPreyDateDisplayed.seconds(0);
+  $scope.currentPreyDateDisplayed.minutes(0);
+  preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
+   today = moment();
+});
+
+
+
+
+
+
+
   
   $scope.currentPreyDateDisplayed =  moment(); 
   $scope.currentPreyDateDisplayed.hours(0);
@@ -203,6 +263,79 @@ $scope.showDatePicker = function () {
   $scope.currentPreyDateDisplayed.minutes(0);
   preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
   var today = moment();
+
+  
+  /* 
+
+  var GetPreyDateHeader = function() {
+    
+    var dayOfWeek = $scope.currentPreyDateDisplayed.dayOfWeek()
+    var day = ""; 
+   if(dayOfWeek == 1)
+      day = "Mandag";
+   else if(dayOfWeek == 2)
+      day = "Tirsdag";
+   else if(dayOfWeek == 3)
+      day = "Onsdag";
+   else if(dayOfWeek == 4)
+      day = "Torsdag";
+   else if(dayOfWeek == 5)
+      day = "Fredag";
+   else if(dayOfWeek == 6)
+      day = "Lørdag";
+   else if(dayOfWeek == 7)
+      day = "Søndag";
+   else 
+      day = "Ukjent";
+
+    day = day + " " + $scope.currentPreyDateDisplayed.dayOfMonth() + "." + $scope.currentPreyDateDisplayed.monthOfYear() + "." + $scope.currentPreyDateDisplayed.Year(); 
+    
+    $scope.preyDateHeader  = day; 
+  }
+   
+
+  GetPreyDateHeader();
+  */
+
+  /*
+  private void setUpCurrentDay() {
+    int dayOfWeek = timeCurrentlyUsedInPreyOverView.getDayOfWeek();
+    String day;
+    switch (dayOfWeek) {
+    case 1:
+      day = "Mandag";
+      break;
+    case 2:
+      day = "Tirsdag";
+      break;
+    case 3:
+      day = "Onsdag";
+      break;
+    case 4:
+      day = "Torsdag";
+      break;
+    case 5:
+      day = "Fredag";
+      break;
+    case 6:
+      day = "Lørdag";
+      break;
+    case 7:
+      day = "Søndag";
+      break;
+    default:
+      day = "Ukjent";
+      break;
+
+    }
+    day += " " + timeCurrentlyUsedInPreyOverView.getDayOfMonth() + "."
+        + timeCurrentlyUsedInPreyOverView.getMonthOfYear() + "."
+        + timeCurrentlyUsedInPreyOverView.getYear();
+    currentDay.setText(day);
+  }
+
+
+  */
 
 
  $ionicModal.fromTemplateUrl('templates/login.html', function($ionicModal) {
@@ -235,6 +368,7 @@ $scope.showDatePicker = function () {
     minDate:  moment().subtract(100, 'years').toDate(),
     allowOldDates: true,
     allowFutureDates: true,
+    locale: "NO",
     doneButtonLabel: 'Velg dag',
     doneButtonColor: '#000000',
     cancelButtonLabel: 'Avbryt',
@@ -260,6 +394,7 @@ $scope.showDatePicker = function () {
     minDate:  moment().subtract(100, 'years').toDate(),
     allowOldDates: true,
     allowFutureDates: true,
+     locale: "NO",
     doneButtonLabel: 'Sett alarm',
     doneButtonColor: '#000000',
     cancelButtonLabel: 'Avbryt',
@@ -269,7 +404,11 @@ $scope.showDatePicker = function () {
   $scope.currentAlarm = prey;
       if($localstorage.hasValue(prey.title)){
         alarmService.cancelAlarm(prey.title);
-
+ $cordovaToast.showLongBottom('Alarm er deaktivert!').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+            });
         preyTimesService.getPreyTimesForDay($scope.currentPreyDateDisplayed.dayOfYear(),findActiveAndNextPrey);
       }else {
         
@@ -308,6 +447,13 @@ $scope.showDatePicker = function () {
       $scope.currentAlarm = prey;
       if($localstorage.hasValue(prey.title)){
         alarmService.cancelAlarm(prey.title);
+            console.log("cancel");
+             $cordovaToast.showLongBottom('Alarm er deaktivert.').then(function(success) {
+    // success
+            }, function (error) {
+              // error
+            });
+
       }else {
         $scope.modal.show();
       
@@ -508,17 +654,20 @@ $scope.showDatePicker = function () {
  
  $scope.navTitle = '<div class="icon-home" ng-click="differentTapTitle()"></div>';
 
-  $scope.settings = { 'calendarBasic' : true, 'calenderCity': false ,'city' : 'Oslo','skygge1': false, 'skygge2' : true, 'skygge1by': false, 'skygge2by' : false};
+  
 
-  $scope.city = null; 
+  //$scope.city = null; 
+  /*
   $scope.skygge1 = false;
   $scope.skygge2 = false; 
   $scope.isDisabledBy = true;
   $scope.isDisabledStandard = true;
-
+  */
   var functionRenderSettings = function(){
      if($localstorage.hasValue("settings")){
         $scope.settings = $localstorage.getObject('settings');
+     }else {
+      $scope.settings = { 'calendarBasic' : true, 'calenderCity': false ,'city' : 'Oslo','skygge1': false, 'skygge2' : true, 'skygge1by': false, 'skygge2by' : false};
      }
   }
 
@@ -529,6 +678,8 @@ $scope.showDatePicker = function () {
     $scope.$watch('settings.city', function(newVal,oldVal) {
 
       if(newVal != oldVal){
+
+      
       $cordovaToast.showLongBottom(newVal +  ' er valgt').then(function(success) {
     // success
             }, function (error) {
@@ -543,7 +694,7 @@ $scope.showDatePicker = function () {
 
          if(newVal == true) {
 
-              if(newVal != oldVal){
+              if(newVal != oldVal && newVal !=null){
       $cordovaToast.showLongBottom($scope.settings.city +  ' er valgt').then(function(success) {
     // success
             }, function (error) {
@@ -555,8 +706,8 @@ $scope.showDatePicker = function () {
             $scope.settings.calendarCity = true; 
             $scope.settings.skygge1 = false; 
             $scope.settings.skygge2 = false; 
-            $scope.settings.skygge2by = true;
-            $scope.settings.skygge1by = false;
+       //     $scope.settings.skygge2by = true;
+       //     $scope.settings.skygge1by = false;
 
          };
          if(newVal == false &&  $scope.settings.calendarBasic == false)
@@ -585,6 +736,7 @@ $scope.showDatePicker = function () {
         $scope.settings.skygge1 = true; 
         $scope.settings.skygge1by = false;  
         $scope.settings.skygge2by = false;  
+        
 
       }
       if(newVal == false){
@@ -612,6 +764,7 @@ $scope.showDatePicker = function () {
         $scope.settings.skygge2 = true; 
         $scope.settings.skygge1by = false;  
         $scope.settings.skygge2by = false;  
+       
 
       }
       if(newVal == false){
@@ -634,6 +787,7 @@ $scope.showDatePicker = function () {
         $scope.settings.skygge2 = false; 
         $scope.settings.calendarCity = true; 
       }
+      console.log("skygge1:" + newVal);
 
       if(newVal == false && $scope.settings.calendarCity){
           $scope.settings.skygge2by = true;  
@@ -654,6 +808,7 @@ $scope.showDatePicker = function () {
         $scope.settings.skygge2 = false; 
         $scope.settings.calendarCity = true; 
       }
+      console.log("skygge2:" + newVal);
 
       if(newVal == false && $scope.settings.calendarCity){
           $scope.settings.skygge1by = true;  

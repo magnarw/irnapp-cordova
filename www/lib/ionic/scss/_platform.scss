@@ -11,7 +11,7 @@
   // if its in Cordova, and set to fullscreen, then disregard the bump.
   &:not(.fullscreen) {
     .bar-header:not(.bar-subheader) {
-      height: $bar-height + $ios-statusbar-height;
+      height: $bar-height + $ios-statusbar-height + $ios-statusbar-height-add;
 
       &.item-input-inset .item-input-wrapper {
         margin-top: 19px !important;
