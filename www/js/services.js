@@ -48,6 +48,10 @@ angular.module('starter.services', [])
        if(settings!=null && settings.city != null){
            city = settings.city;
        }
+      if(!settings.calendarCity){
+              city = 'Oslo';
+
+      }
        $http.get('preytimes/'+city+'.js').success(function(data) {
           
             if(settings!=null){
@@ -57,6 +61,7 @@ angular.module('starter.services', [])
                 skygge2 = settings.skygge2;
             } 
             }
+           
             var prey = data[day-1];
 
 
@@ -86,16 +91,19 @@ angular.module('starter.services', [])
        if(settings!=null && settings.city != null){
            city = settings.city;
        }
+        if(!settings.calendarCity){
+              city = 'Oslo';
+            }
        $http.get('preytimes/'+city+'.js').success(function(data) {
           
             if(settings!=null){
-            if(settings.city!=null){
+            if(settings.calendarCity!=null){
                 skygge2 = settings.skygge2by;
             }else {
                 skygge2 = settings.skygge2;
             } 
             }
-           
+            
 
             var days = [];
              for(var i = start;i<=end;i++){

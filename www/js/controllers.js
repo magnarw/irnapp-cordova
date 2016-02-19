@@ -706,7 +706,7 @@ $scope.showDatePicker = function () {
             $scope.settings.calendarCity = true; 
             $scope.settings.skygge1 = false; 
             $scope.settings.skygge2 = false; 
-       //     $scope.settings.skygge2by = true;
+            $scope.settings.skygge2by = true;
        //     $scope.settings.skygge1by = false;
 
          };

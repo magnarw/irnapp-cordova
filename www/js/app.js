@@ -107,7 +107,7 @@ document.addEventListener("resume", function(){
     });
 
  alarmService.rescheduleAllAcitveAlarms();
-
+/*
  cordova.plugins.notification.local.on("click", function (notification) {
        
         
@@ -131,7 +131,7 @@ document.addEventListener("resume", function(){
 
 
     });
-
+*/
 
 
            // Notification has reached its trigger time (Tomorrow at 8:45 AM)
