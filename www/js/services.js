@@ -130,17 +130,77 @@ angular.module('starter.services', [])
 
 
 
+private DateTime getPrayTimeFromString(DateTime time, String timeToParse,int day, int month) {
+    DateTimeFormatter fmt = DateTimeFormat.forPattern("h:mm:ss aa");
+    LocalTime timeFromString = LocalTime.parse(timeToParse,fmt);
+    System.out.println("Month, day, year:" + time.getMonthOfYear() + "," + time.getDayOfMonth() + "," + time.getYear());
+    
+    //clean up orginal calender
+    if(time.getMonthOfYear()>=3 && time.getMonthOfYear()<=10){
+      if(time.getMonthOfYear()==3 && time.getDayOfMonth()>=30){
+        timeFromString = timeFromString.minusHours(1);
+      }else if(time.getMonthOfYear()==10 && time.getDayOfMonth()<26){
+        timeFromString = timeFromString.minusHours(1);
+      }else if (time.getMonthOfYear()>3 && time.getMonthOfYear()<10){
+        timeFromString = timeFromString.minusHours(1);
+      }else if(time.getMonthOfYear() == 3 && time.getDayOfMonth() == 29 && time.getYear()==2016){
+        timeFromString = timeFromString.minusHours(1);
+      }
+    }
+    
+    //create a new date starting at midnight with time zone gt+1
+    DateTimeZone zone = DateTimeZone.forID("Europe/Amsterdam");
+    DateTime dateToReturn = new DateTime( time.getYear(), time.getMonthOfYear(), time.getDayOfMonth(), timeFromString.getHourOfDay(), timeFromString.getMinuteOfHour(), 0, zone );
+    
+    System.out.println("date nå:" + dateToReturn.toString());
+    //DateTime toReturn = time.plusHours(timeFromString.getHourOfDay()).plusMinutes(timeFromString.getMinuteOfHour());
+    
+    //adjust for summer time
+    if(dateToReturn.getDayOfYear()>=getLastSundayInMarch(dateToReturn) && dateToReturn.getDayOfYear()<getLastSundayInOctober(dateToReturn)){
+      dateToReturn = dateToReturn.plusHours(1);
+    }
+    System.out.println("date etter:" + dateToReturn.toString());
+    //if(time.getDayOfYear() == getLastSundayInOctober(time))
+    //  toReturn = toReturn.plusHours(1);
+    
+    
+    
+    //stuff to clean up summer time in the orginal calender(from 2013)
 
+    
+    return dateToReturn;
+  
+  }
     
 
  
 
-    var cleanTime = function(bla){
+    var cleanTime = function(bla,date){
 
         var array = bla.split(" ");
         var array2 = array[0].split(":");
 
         var hourPart = parseInt(array2[0]);
+
+        if(date.month())>=3 && date.date()<=10){
+           if(date.month())==3 && date.date()>=30){
+                hourPart = hourpart -1;  
+          }else if(date.month())==10 && date.date()<26){
+              hourPart = hourpart -1;  
+          }else if(date.month())>3 && date.date()<10){
+              hourPart = hourpart -1; 
+          }else if(date.month())==3 && date.date()<29 && time.year() == 2016){
+               hourPart = hourpart -1; 
+          }
+
+
+        }
+
+        if(date.isDST()){
+          hourPart = hourPart +1; 
+        }
+
+ 
 
         if(array[1] == "PM" && hourPart<12 )
         {
@@ -237,16 +297,18 @@ angular.module('starter.services', [])
 
     this.rescheduleAllAcitveAlarms = function(){
         console.log('Trying to scheduled all active alarms');
-        var scheduledIds = ['1','2','3','4','5','6'];
+        var scheduledIds = ['1','2','3','4','5','6','7'];
             console.log("scheduledIds:" + scheduledIds);
             for(var i in scheduledIds){
 
                
                       // console.log('Notification with ID ' + id + ' is scheduled: ' + isScheduled);
-                    if($localstorage.get(getPreyNameAlarmId(i))!=undefined && $localstorage.get(getPreyNameAlarmId(i)) !=false ){
+                    if($localstorage.get(getPreyNameAlarmId(i)) >=0 ){
+                   
+                    console.log('bla:' + $localstorage.get(getPreyNameAlarmId(i)));
                        console.log('Alarmid:' + getPreyNameAlarmId(i));
                       before = $localstorage.get(getPreyNameAlarmId(i));
-                      this.setAlarm(getPreyNameAlarmId(i),before,false);
+                      this.setUpdateAlarm(getPreyNameAlarmId(i),before,false);
                     }
                  
 
@@ -261,6 +323,8 @@ angular.module('starter.services', [])
         var preyIndex = getAlarmIdFromPreyName(prey);
         $localstorage.set(prey,false);
         $cordovaLocalNotification.cancel(preyIndex).then(function () {
+           console.log('cancler alarm ' + prey);
+          
           console.log('callback for cancellation background notification');
         });
     };
@@ -299,15 +363,16 @@ angular.module('starter.services', [])
                date = date.add(1, 'd');
             }
 
-
-
+        console.log("setter prey index:" + preyIndex)
+        console.log("date:" + date.toDate());
         cordova.plugins.notification.local.schedule({
             id: preyIndex,
             at: date.toDate(),
             text: "Det er tid for " + getPreyNameAlarmId(preyIndex),
             title: "Det er tid for bønn!",
             every: "day",
-            autoClear: false
+           
+            sound  : 'file://sounds/alarm.mp3'
         }).then(function () {
             console.log("The notification has been set");
         });
@@ -319,6 +384,51 @@ angular.module('starter.services', [])
         
     };
 
+
+       this.setUpdateAlarm = function(prey, before,nextDay){
+        var preyIndex = getAlarmIdFromPreyName(prey);
+        $localstorage.set(prey,before);
+
+        var dayOfYear = moment().dayOfYear();
+        if(nextDay)
+          dayOfYear++; 
+        if(nextDay && dayOfYear>365)
+          dayOfYear = 1; 
+       
+
+        preyTimesService.getPreyTimesForDay(dayOfYear, function(data){
+
+            var prey = data[preyIndex-1];
+            var date = moment();
+            var res = prey.time.split(":");
+            date = date.hours(res[0]);
+            date = date.minutes(res[1]);
+            date = date.add(-before, 'm');
+
+            if(date<moment() || nextDay){
+               date = date.add(1, 'd');
+            }
+
+        console.log("setter prey index:" + preyIndex)
+        console.log("date:" + date.toDate());
+        cordova.plugins.notification.local.update({
+            id: preyIndex,
+            at: date.toDate(),
+            text: "Det er tid for " + getPreyNameAlarmId(preyIndex),
+            title: "Det er tid for bønn!",
+            every: "day",
+           
+            sound  : 'file://sounds/alarm.mp3'
+        }).then(function () {
+            console.log("The notification has been set");
+        });
+
+
+          
+
+        });
+        
+    };
   
 
  

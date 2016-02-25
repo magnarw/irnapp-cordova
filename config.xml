@@ -19,8 +19,8 @@
   </feature>
  <gap:plugin name="de.appplant.cordova.plugin.local-notification" />
  
+<preference name="StatusBarStyle" value="blackopaque" />
 
-  
   <platform name="ios">
       
       <!-- iOS 7.0+ -->

@@ -314,7 +314,9 @@ img.qibla {
 
 .menu {
 
-padding-top : 6%;
+  background-color: black;
+
+padding-top : 9%;
 	display:-webkit-box;
 
 	display:-webkit-flex;

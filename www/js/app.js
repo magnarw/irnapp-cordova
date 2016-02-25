@@ -50,7 +50,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','s
 
 .run(function($ionicPlatform,$cordovaToast,$rootScope,alarmService,$ionicPopup,$localstorage) {
 
- 
+
 
  var globalClose = false; 
 
@@ -60,7 +60,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers','panzoom','s
 
 
 
-    
+
   
 
 cordova.plugins.notification.local.hasPermission(function(granted) {
